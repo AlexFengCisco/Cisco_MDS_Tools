@@ -229,6 +229,7 @@ start_time=time.time()
 # try new git branch
 
 print 'try new branch'
+
 ##### test comapre zone active 
 '''
 result = tool.compare_zone_active(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
