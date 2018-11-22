@@ -1,0 +1,2968 @@
+
+!Command: show running-config
+!Time: Fri Sep 28 00:57:59 2018
+
+version 6.2(19)
+power redundancy-mode insrc-redundant
+
+feature npiv
+no feature http-server
+feature lldp
+
+role name default-role
+  description This is a system defined role and applies to all users.
+  rule 5 permit show feature environment
+  rule 4 permit show feature hardware
+  rule 3 permit show feature module
+  rule 2 permit show feature snmp
+  rule 1 permit show feature system
+role name zone-operator
+  rule 3 permit exec
+  rule 2 permit show
+  rule 1 permit config
+username admin password 5 $1$hBZzUh8c$Hs57qRoCZrHhDie9sIHL3.  role network-admin
+username sfmon password 5 $1$Z2zHwrwj$YZ5AQVvzLPNclXTUB3mQ60  role network-operator
+username zoneop password 5 $1$gyqCTMzI$uxc087gQjASwjSYI67BcB.  role zone-operator
+username cloudadmin password 5 $1$B3ZCuBNX$nbS7ir4j89iQhYBDdevHz/  role zone-operator
+username dcnmadmin password 5 $1$seklW/5U$PgpCbY983U388aEyX1wmO0  role zone-operator
+username srmmon password 5 $1$M4hvTJqQ$sR1YlMmxW9gZGLWBOsTcc0  role network-operator
+ip domain-lookup
+ip host YQB-9710-F7HE1  11.155.62.18
+aaa group server radius radius
+snmp-server user admin network-admin auth md5 0xd4ca42a342e148a9e9ec0ca89477a0c9 priv 0xd4ca42a342e148a9e9ec0ca89477a0c9 localizedkey
+snmp-server user sfmon network-operator auth md5 0x43091b90b83407d6f6c08163a4cbb516 priv 0x43091b90b83407d6f6c08163a4cbb516 localizedkey
+snmp-server user srmmon network-operator auth md5 0x1d12a6d4a2d0a45414e905e3291b5641 priv 0x1d12a6d4a2d0a45414e905e3291b5641 localizedkey
+snmp-server user zoneop zone-operator auth md5 0x29a5584cb5fc1462b12f6ab299b41e54 priv 0x29a5584cb5fc1462b12f6ab299b41e54 localizedkey
+snmp-server user dcnmadmin zone-operator auth md5 0x03730f8c40d789dae74ef02af94f5cdc priv 0x03730f8c40d789dae74ef02af94f5cdc localizedkey
+snmp-server user cloudadmin zone-operator auth md5 0x5ee7d42351545c3ac65bac789b037a1a priv 0x5ee7d42351545c3ac65bac789b037a1a localizedkey
+snmp-server host 11.155.62.113 traps version 2c public udp-port 2162
+snmp-server host 11.159.60.50 traps version 2c public udp-port 2162
+snmp-server host 11.155.55.174 traps version 1 public
+snmp-server host 11.159.8.18 traps version 1 public udp-port 161
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+no port-monitor activate slowdrain
+
+port-monitor name slowdrainmon
+  port-type all
+  no monitor counter link-loss
+  no monitor counter sync-loss
+  no monitor counter signal-loss
+  counter invalid-words poll-interval 60 delta rising-threshold 1 event 4 falling-threshold 0 event 4
+  counter invalid-crc poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  no monitor counter state-change
+  counter tx-discards poll-interval 60 delta rising-threshold 200 event 4 falling-threshold 10 event 4
+  no monitor counter lr-rx
+  no monitor counter lr-tx
+  counter timeout-discards poll-interval 60 delta rising-threshold 200 event 4 falling-threshold 10 event 4
+  counter credit-loss-reco poll-interval 1 delta rising-threshold 1 event 4 falling-threshold 0 event 4
+  counter tx-credit-not-available poll-interval 1 delta rising-threshold 10 event 4 falling-threshold 0 event 4
+  counter rx-datarate poll-interval 120 delta rising-threshold 78 event 4 falling-threshold 15 event 4
+  counter tx-datarate poll-interval 60 delta rising-threshold 78 event 4 falling-threshold 15 event 4
+  no monitor counter err-pkt-from-port
+  no monitor counter err-pkt-to-xbar
+  no monitor counter err-pkt-from-xbar
+  no monitor counter tx-slowport-count
+  no monitor counter tx-slowport-oper-delay
+  no monitor counter txwait
+
+port-monitor name slowdrainmon_E
+  port-type trunks
+  counter link-loss poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter sync-loss poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter signal-loss poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter invalid-words poll-interval 60 delta rising-threshold 1 event 4 falling-threshold 0 event 4
+  counter invalid-crc poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter state-change poll-interval 60 delta rising-threshold 3 event 4 falling-threshold 0 event 4
+  counter tx-discards poll-interval 60 delta rising-threshold 200 event 4 falling-threshold 10 event 4
+  counter lr-rx poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter lr-tx poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter timeout-discards poll-interval 60 delta rising-threshold 200 event 4 falling-threshold 10 event 4
+  counter credit-loss-reco poll-interval 1 delta rising-threshold 1 event 4 falling-threshold 0 event 4
+  counter tx-credit-not-available poll-interval 1 delta rising-threshold 10 event 4 falling-threshold 0 event 4
+  counter rx-datarate poll-interval 60 delta rising-threshold 40 event 4 falling-threshold 15 event 4
+  counter tx-datarate poll-interval 60 delta rising-threshold 40 event 4 falling-threshold 15 event 4
+  no monitor counter err-pkt-from-port
+  no monitor counter err-pkt-to-xbar
+  no monitor counter err-pkt-from-xbar
+  no monitor counter tx-slowport-count
+  no monitor counter tx-slowport-oper-delay
+  no monitor counter txwait
+port-monitor activate slowdrainmon_E
+
+port-monitor name slowdrainmon_F
+  port-type access
+  counter link-loss poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter sync-loss poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter signal-loss poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter invalid-words poll-interval 60 delta rising-threshold 1 event 4 falling-threshold 0 event 4
+  counter invalid-crc poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter state-change poll-interval 60 delta rising-threshold 3 event 4 falling-threshold 0 event 4
+  counter tx-discards poll-interval 60 delta rising-threshold 200 event 4 falling-threshold 10 event 4
+  counter lr-rx poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter lr-tx poll-interval 60 delta rising-threshold 5 event 4 falling-threshold 1 event 4
+  counter timeout-discards poll-interval 60 delta rising-threshold 200 event 4 falling-threshold 10 event 4
+  counter credit-loss-reco poll-interval 1 delta rising-threshold 1 event 4 falling-threshold 0 event 4
+  counter tx-credit-not-available poll-interval 1 delta rising-threshold 10 event 4 falling-threshold 0 event 4
+  counter rx-datarate poll-interval 60 delta rising-threshold 78 event 4 falling-threshold 15 event 4
+  counter tx-datarate poll-interval 60 delta rising-threshold 78 event 4 falling-threshold 15 event 4
+  no monitor counter err-pkt-from-port
+  no monitor counter err-pkt-to-xbar
+  no monitor counter err-pkt-from-xbar
+  no monitor counter tx-slowport-count
+  no monitor counter tx-slowport-oper-delay
+  counter txwait poll-interval 1 delta rising-threshold 50 event 4 falling-threshold 0 event 4
+port-monitor activate slowdrainmon_F
+snmp-server enable traps callhome event-notify
+snmp-server enable traps callhome smtp-send-fail
+snmp-server enable traps cfs state-change-notif
+snmp-server enable traps cfs merge-failure
+snmp-server enable traps fcdomain dmNewPrincipalSwitchNotify
+snmp-server enable traps fcdomain dmDomainIdNotAssignedNotify
+snmp-server enable traps fcdomain dmFabricChangeNotify
+snmp-server enable traps aaa server-state-change
+snmp-server enable traps scsi scsi-lunDiscovery-complete
+snmp-server enable traps fcns reject-reg-req
+snmp-server enable traps fcns local-entry-change
+snmp-server enable traps fcns db-full
+snmp-server enable traps fcns remote-entry-change
+snmp-server enable traps rscn rscnElsRejectReqNotify
+snmp-server enable traps rscn rscnIlsRejectReqNotify
+snmp-server enable traps rscn rscnElsRxRejectReqNotify
+snmp-server enable traps rscn rscnIlsRxRejectReqNotify
+snmp-server enable traps fcs request-reject
+snmp-server enable traps fcs discovery-complete
+snmp-server enable traps fctrace route-test-complete
+snmp-server enable traps zone request-reject1
+snmp-server enable traps zone merge-success
+snmp-server enable traps zone merge-failure
+snmp-server enable traps zone default-zone-behavior-change
+snmp-server enable traps zone unsupp-mem
+snmp-server enable traps vsan vsanStatusChange
+snmp-server enable traps vsan vsanPortMembershipChange
+snmp-server enable traps fspf fspfNbrStateChangeNotify
+snmp-server enable traps feature-control FeatureOpStatusChange
+snmp-server enable traps vrrp cVrrpNotificationNewMaster
+snmp-server enable traps fdmi cfdmiRejectRegNotify
+snmp-server enable traps sysmgr cseFailSwCoreNotifyExtended
+snmp-server enable traps config ccmCLIRunningConfigChanged
+snmp-server enable traps snmp authentication
+snmp-server community public group network-operator
+snmp-server community private group network-admin
+snmp-server community ccbsan group network-operator
+ntp server 11.155.55.40
+
+vlan 1
+
+vsan database
+  vsan 11 name "vsan11_prod"
+  vsan 12 name "vsan12_backup"
+fcdomain optimize fast-restart vsan 1
+fcdomain domain 217 static vsan 1
+fcdomain optimize fast-restart vsan 11
+fcdomain domain 71 static vsan 11
+fcdomain optimize fast-restart vsan 12
+fcdomain domain 71 static vsan 12
+fcdomain fcid database
+  vsan 1 wwn 10:00:00:05:73:ad:ec:87 fcid 0xd90000 dynamic
+  vsan 1 wwn 50:01:43:80:09:2a:24:64 fcid 0xd90001 dynamic
+  vsan 1 wwn 50:01:43:80:09:2a:25:74 fcid 0xd90002 dynamic
+  vsan 1 wwn 10:00:00:00:c9:a2:26:b4 fcid 0xd90003 dynamic
+  vsan 1 wwn 10:00:00:00:c9:a2:27:52 fcid 0xd90004 dynamic
+  vsan 1 wwn 50:01:43:80:11:00:08:c0 fcid 0xd90005 dynamic
+  vsan 1 wwn 50:01:43:80:11:00:08:68 fcid 0xd90006 dynamic
+  vsan 1 wwn 50:01:43:80:11:00:08:c2 fcid 0xd90007 dynamic
+  vsan 1 wwn 50:01:43:80:11:00:08:14 fcid 0xd90008 dynamic
+  vsan 11 wwn 50:01:43:80:11:00:08:c2 fcid 0x470000 dynamic
+  vsan 11 wwn 50:01:43:80:11:00:08:68 fcid 0x470001 dynamic
+  vsan 11 wwn 50:01:43:80:11:00:08:14 fcid 0x470002 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:31:7a fcid 0x470003 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:31:74 fcid 0x470004 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:31:3e fcid 0x470005 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:31:36 fcid 0x470006 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:30:d6 fcid 0x470007 dynamic
+  vsan 12 wwn 50:01:43:80:11:00:08:c2 fcid 0x470000 dynamic
+  vsan 12 wwn 50:01:43:80:02:52:31:74 fcid 0x470001 dynamic
+  vsan 11 wwn 50:01:43:80:04:bd:45:d8 fcid 0x470008 dynamic
+  vsan 12 wwn 50:01:43:80:04:bd:45:da fcid 0x470002 dynamic
+  vsan 11 wwn 50:01:43:80:04:bd:42:7c fcid 0x470009 dynamic
+  vsan 12 wwn 50:01:43:80:11:00:08:68 fcid 0x470003 dynamic
+  vsan 11 wwn 21:27:00:05:73:ad:ec:80 fcid 0x470100 area dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:eb:e4 fcid 0x47000a dynamic
+  vsan 11 wwn 20:e7:00:05:73:ad:ec:80 fcid 0x470200 area dynamic
+  vsan 12 wwn 10:00:00:00:c9:a5:ee:fb fcid 0x470004 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:ee:fa fcid 0x47000b dynamic
+  vsan 11 wwn 50:01:43:80:01:31:17:06 fcid 0x47000c dynamic
+  vsan 11 wwn 50:01:43:80:04:22:ff:36 fcid 0x47000d dynamic
+  vsan 12 wwn 50:01:43:80:04:22:fe:ac fcid 0x470005 dynamic
+  vsan 11 wwn 50:01:43:80:04:22:fe:a4 fcid 0x47000e dynamic
+  vsan 11 wwn 10:00:00:00:c9:76:25:80 fcid 0x47000f dynamic
+  vsan 12 wwn 10:00:00:00:c9:76:25:81 fcid 0x470006 dynamic
+  vsan 11 wwn 10:00:00:00:c9:76:23:da fcid 0x470010 dynamic
+  vsan 11 wwn 10:00:00:00:c9:76:22:78 fcid 0x470011 dynamic
+  vsan 12 wwn 10:00:00:00:c9:76:22:79 fcid 0x470007 dynamic
+  vsan 11 wwn 10:00:00:00:c9:76:23:f2 fcid 0x470012 dynamic
+  vsan 12 wwn 10:00:00:00:c9:72:3a:4a fcid 0x470008 dynamic
+  vsan 11 wwn 10:00:00:00:c9:72:3c:e8 fcid 0x470013 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6f:df:3e fcid 0x470014 dynamic
+  vsan 11 wwn 10:00:00:00:c9:56:6c:9a fcid 0x470015 dynamic
+  vsan 11 wwn 10:00:00:00:c9:56:45:95 fcid 0x470016 dynamic
+  vsan 11 wwn 10:00:00:00:c9:86:91:92 fcid 0x470017 dynamic
+  vsan 12 wwn 10:00:00:00:c9:8b:ec:bc fcid 0x470009 dynamic
+  vsan 11 wwn 10:00:00:00:c9:86:03:1e fcid 0x470018 dynamic
+  vsan 12 wwn 10:00:00:00:c9:84:5b:10 fcid 0x47000a dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:aa:56 fcid 0x470019 dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:aa:60 fcid 0x47001a dynamic
+  vsan 12 wwn 10:00:00:00:c9:89:aa:61 fcid 0x47000b dynamic
+  vsan 11 wwn 50:01:43:80:04:c5:aa:fa fcid 0x47001b dynamic
+  vsan 11 wwn 50:01:43:80:04:c5:aa:f8 fcid 0x47001c dynamic
+  vsan 11 wwn 50:01:43:80:04:c5:aa:08 fcid 0x47001d dynamic
+  vsan 11 wwn 50:01:43:80:01:31:15:34 fcid 0x47001e dynamic
+  vsan 12 wwn 50:01:43:80:01:31:16:34 fcid 0x47000c dynamic
+  vsan 11 wwn 50:01:43:80:01:31:12:d8 fcid 0x47001f dynamic
+  vsan 11 wwn 50:01:43:80:01:31:16:fa fcid 0x470020 dynamic
+  vsan 11 wwn 50:01:43:80:01:31:13:cc fcid 0x470021 dynamic
+  vsan 12 wwn 50:01:43:80:01:31:16:70 fcid 0x47000d dynamic
+  vsan 11 wwn 50:01:43:80:01:31:14:60 fcid 0x470022 dynamic
+  vsan 11 wwn 50:01:43:80:01:31:16:84 fcid 0x470023 dynamic
+  vsan 11 wwn 50:01:43:80:05:67:2e:ae fcid 0x470024 dynamic
+  vsan 11 wwn 50:06:0b:00:00:69:b2:64 fcid 0x470300 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:67:ba:28 fcid 0x470400 area dynamic
+  vsan 11 wwn 21:00:00:1b:32:08:00:c3 fcid 0x470500 area dynamic
+  vsan 11 wwn 21:00:00:1b:32:09:e6:49 fcid 0x470600 area dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:e6:77 fcid 0x47000e dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:e6:83 fcid 0x470025 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:ef:09 fcid 0x470026 dynamic
+  vsan 11 wwn 50:01:43:80:00:c3:b9:a6 fcid 0x470027 dynamic
+  vsan 11 wwn 50:06:0b:00:00:68:73:b4 fcid 0x470700 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:68:73:68 fcid 0x470800 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:68:73:3c fcid 0x470900 area dynamic
+  vsan 11 wwn 50:01:43:80:05:67:2f:38 fcid 0x470028 dynamic
+  vsan 11 wwn 50:06:0b:00:00:69:b0:78 fcid 0x470a00 area dynamic
+  vsan 11 wwn 50:01:43:80:05:67:1f:2a fcid 0x470029 dynamic
+  vsan 11 wwn 50:06:0b:00:00:69:b2:44 fcid 0x470b00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:69:b2:5c fcid 0x470c00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:69:b3:a0 fcid 0x470d00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:6a:20:b4 fcid 0x470e00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:5f:c5:28 fcid 0x470f00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:68:ea:c0 fcid 0x471000 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:68:eb:2c fcid 0x471100 area dynamic
+  vsan 11 wwn 50:01:43:80:02:9b:61:ac fcid 0x47002a dynamic
+  vsan 12 wwn 50:06:0b:00:00:68:ea:c2 fcid 0x470100 area dynamic
+  vsan 11 wwn 50:01:43:80:01:31:16:fe fcid 0x47002b dynamic
+  vsan 11 wwn 50:01:43:80:01:31:16:3a fcid 0x47002c dynamic
+  vsan 11 wwn 50:01:43:80:11:00:08:18 fcid 0x47002d dynamic
+  vsan 12 wwn 50:01:43:80:11:00:08:9c fcid 0x47000f dynamic
+  vsan 11 wwn 50:01:43:80:11:00:07:e8 fcid 0x47002e dynamic
+  vsan 11 wwn 50:01:43:80:06:36:f1:60 fcid 0x47002f dynamic
+  vsan 11 wwn 50:01:43:80:06:36:f2:e0 fcid 0x470030 dynamic
+  vsan 12 wwn 50:01:43:80:02:fe:0e:be fcid 0x470010 dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:ec:5e fcid 0x470011 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:f3:a4 fcid 0x470031 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:ec:6d fcid 0x470032 dynamic
+  vsan 12 wwn 21:00:00:1b:32:09:e6:49 fcid 0x470200 area dynamic
+  vsan 11 wwn 10:00:00:00:c9:6f:4d:01 fcid 0x470033 dynamic
+  vsan 12 wwn 10:00:00:00:c9:6f:4a:cd fcid 0x470012 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6f:4f:36 fcid 0x470034 dynamic
+  vsan 12 wwn 10:00:00:00:c9:6e:bc:72 fcid 0x470013 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6b:d6:2a fcid 0x470035 dynamic
+  vsan 12 wwn 10:00:00:00:c9:6b:d6:e6 fcid 0x470014 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6b:d4:d8 fcid 0x470036 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6a:d7:b4 fcid 0x470037 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6c:2c:d7 fcid 0x470038 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6a:f6:9f fcid 0x470039 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:e7:98 fcid 0x47003a dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:e7:82 fcid 0x470015 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:ee:aa fcid 0x47003b dynamic
+  vsan 11 wwn 50:06:0b:00:00:60:86:80 fcid 0x471200 area dynamic
+  vsan 11 wwn 10:00:00:00:c9:6a:f1:53 fcid 0x47003c dynamic
+  vsan 11 wwn 10:00:00:00:c9:6a:e0:ac fcid 0x47003d dynamic
+  vsan 12 wwn 50:06:0b:00:00:60:8a:42 fcid 0x470300 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:60:87:88 fcid 0x471300 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:39:fb:90 fcid 0x471400 area dynamic
+  vsan 12 wwn 50:06:0b:00:00:39:fb:92 fcid 0x470400 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:39:fb:84 fcid 0x471500 area dynamic
+  vsan 12 wwn 10:00:00:00:c9:6e:f2:1f fcid 0x470016 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6e:c5:08 fcid 0x47003e dynamic
+  vsan 12 wwn 10:00:00:00:c9:6a:f1:a5 fcid 0x470017 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6a:e0:ef fcid 0x47003f dynamic
+  vsan 11 wwn 10:00:00:00:c9:6f:39:c0 fcid 0x470040 dynamic
+  vsan 12 wwn 10:00:00:00:c9:ad:06:ab fcid 0x470018 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ad:06:aa fcid 0x470041 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ad:05:ae fcid 0x470042 dynamic
+  vsan 11 wwn 10:00:00:00:c9:64:27:39 fcid 0x470043 dynamic
+  vsan 11 wwn 10:00:00:00:c9:64:36:49 fcid 0x470044 dynamic
+  vsan 12 wwn 10:00:00:00:c9:64:27:3f fcid 0x470019 dynamic
+  vsan 11 wwn 10:00:00:00:c9:b5:38:98 fcid 0x470045 dynamic
+  vsan 11 wwn 10:00:00:00:c9:b5:40:f2 fcid 0x470046 dynamic
+  vsan 12 wwn 10:00:00:00:c9:a7:13:65 fcid 0x47001a dynamic
+  vsan 11 wwn 10:00:00:00:c9:a7:13:64 fcid 0x470047 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a6:fd:03 fcid 0x470048 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a3:20:8c fcid 0x470049 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a7:19:b9 fcid 0x47004a dynamic
+  vsan 11 wwn 10:00:00:00:c9:b5:3f:90 fcid 0x47004b dynamic
+  vsan 11 wwn 10:00:00:00:c9:b5:3d:20 fcid 0x47004c dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:55:67 fcid 0x47004d dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:f0:2a fcid 0x47004e dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:57:3d fcid 0x47001b dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:6f:28 fcid 0x47004f dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:6d:e8 fcid 0x470050 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:6e:64 fcid 0x470051 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a3:1a:d2 fcid 0x470052 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:35:96 fcid 0x470053 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:35:fa fcid 0x470054 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:35:a2 fcid 0x470055 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:36:10 fcid 0x470056 dynamic
+  vsan 12 wwn 50:01:43:80:02:52:36:18 fcid 0x47001c dynamic
+  vsan 11 wwn 50:01:43:80:02:34:d6:14 fcid 0x470057 dynamic
+  vsan 11 wwn 50:01:43:80:02:52:30:68 fcid 0x470058 dynamic
+  vsan 11 wwn 50:06:0b:00:00:30:e6:88 fcid 0x471600 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:30:e6:62 fcid 0x471700 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:30:e7:dc fcid 0x471800 area dynamic
+  vsan 11 wwn 50:01:43:80:02:52:37:94 fcid 0x470059 dynamic
+  vsan 12 wwn 50:01:43:80:02:52:37:ce fcid 0x47001d dynamic
+  vsan 11 wwn 50:06:0b:00:00:30:e8:da fcid 0x471900 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:30:eb:60 fcid 0x471a00 area dynamic
+  vsan 12 wwn 50:01:43:80:01:31:11:dc fcid 0x47001e dynamic
+  vsan 11 wwn 50:01:43:80:01:31:13:4c fcid 0x47005a dynamic
+  vsan 11 wwn 50:01:43:80:01:31:12:d6 fcid 0x47005b dynamic
+  vsan 11 wwn 50:01:43:80:01:31:13:58 fcid 0x47005c dynamic
+  vsan 11 wwn 50:01:43:80:01:31:12:e4 fcid 0x47005d dynamic
+  vsan 11 wwn 50:06:0b:00:00:38:e9:00 fcid 0x471b00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:30:ec:bc fcid 0x471c00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:30:e5:f4 fcid 0x471d00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:68:46:b8 fcid 0x471e00 area dynamic
+  vsan 11 wwn 50:06:0b:00:00:68:46:c0 fcid 0x471f00 area dynamic
+  vsan 11 wwn 50:01:43:80:02:34:d6:12 fcid 0x47005e dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:f0:ca fcid 0x47005f dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:5d:56 fcid 0x47001f dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:eb:17 fcid 0x470060 dynamic
+  vsan 11 wwn 50:01:43:80:01:31:16:e4 fcid 0x470061 dynamic
+  vsan 11 wwn 50:01:43:80:01:31:15:2e fcid 0x470062 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:46:d6 fcid 0x470063 dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:47:5c fcid 0x470020 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:48:0a fcid 0x470064 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:ec:63 fcid 0x470065 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:ef:b1 fcid 0x470066 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:e8:51 fcid 0x470067 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:ef:00 fcid 0x470068 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6f:1f:42 fcid 0x470069 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6f:10:48 fcid 0x47006a dynamic
+  vsan 11 wwn 10:00:00:00:c9:6c:18:0e fcid 0x47006b dynamic
+  vsan 11 wwn 10:00:00:00:c9:6a:97:1c fcid 0x47006c dynamic
+  vsan 12 wwn 10:00:00:00:c9:a5:6d:e9 fcid 0x470021 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:5f:ac fcid 0x47006d dynamic
+  vsan 11 wwn 10:00:00:00:c9:a7:19:dc fcid 0x47006e dynamic
+  vsan 11 wwn 10:00:00:00:c9:64:84:1c fcid 0x47006f dynamic
+  vsan 12 wwn 10:00:00:00:c9:64:45:e7 fcid 0x470022 dynamic
+  vsan 11 wwn 10:00:00:00:c9:64:ee:86 fcid 0x470070 dynamic
+  vsan 11 wwn 10:00:00:00:c9:64:45:e7 fcid 0x470071 dynamic
+  vsan 11 wwn 10:00:00:00:c9:64:ee:87 fcid 0x470072 dynamic
+  vsan 12 wwn 10:00:00:00:c9:64:ee:86 fcid 0x470023 dynamic
+  vsan 11 wwn 10:00:00:00:c9:97:03:e2 fcid 0x470073 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:6c:78 fcid 0x470074 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:68:5e fcid 0x470075 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:6e:7a fcid 0x470076 dynamic
+  vsan 11 wwn 50:01:43:80:04:c5:ae:04 fcid 0x470077 dynamic
+  vsan 11 wwn 10:00:00:00:c9:95:ff:8c fcid 0x470078 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6e:bf:06 fcid 0x470079 dynamic
+  vsan 11 wwn 10:00:00:00:c9:66:b8:56 fcid 0x47007a dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:e7:f1 fcid 0x47007b dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:e7:3d fcid 0x47007c dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:e7:ec fcid 0x470024 dynamic
+  vsan 11 wwn 21:17:00:05:73:ad:ec:80 fcid 0x472000 area dynamic
+  vsan 11 wwn 50:01:43:80:06:32:32:fc fcid 0x47007d dynamic
+  vsan 11 wwn 50:01:43:80:06:32:33:06 fcid 0x47007e dynamic
+  vsan 11 wwn 50:01:43:80:11:00:11:a0 fcid 0x47007f dynamic
+  vsan 11 wwn 50:01:43:80:12:fe:cc:18 fcid 0x470080 dynamic
+  vsan 11 wwn 10:00:00:00:c9:76:25:74 fcid 0x470081 dynamic
+  vsan 11 wwn 10:00:00:00:c9:7a:fd:f6 fcid 0x470082 dynamic
+  vsan 11 wwn 50:01:43:80:09:57:b6:f4 fcid 0x470083 dynamic
+  vsan 11 wwn 50:01:43:80:09:2a:25:48 fcid 0x470084 dynamic
+  vsan 11 wwn 50:01:43:80:09:57:ae:ba fcid 0x470085 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6e:dd:ca fcid 0x470086 dynamic
+  vsan 11 wwn 10:00:00:00:c9:6a:30:9e fcid 0x470087 dynamic
+  vsan 11 wwn 50:01:43:80:09:57:ad:7c fcid 0x470088 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:e7:c8 fcid 0x470089 dynamic
+  vsan 12 wwn 10:00:00:00:c9:74:e6:7e fcid 0x470025 dynamic
+  vsan 11 wwn 10:00:00:00:c9:74:ee:b5 fcid 0x47008a dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:af:50 fcid 0x47008b dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:ab:6e fcid 0x47008c dynamic
+  vsan 11 wwn 50:01:43:80:12:fe:cc:14 fcid 0x47008d dynamic
+  vsan 11 wwn 50:01:43:80:11:00:11:a8 fcid 0x47008e dynamic
+  vsan 11 wwn 50:01:43:80:12:fe:cd:a0 fcid 0x47008f dynamic
+  vsan 11 wwn 50:01:43:80:04:bd:34:8c fcid 0x470090 dynamic
+  vsan 11 wwn 10:00:00:00:c9:95:72:30 fcid 0x470091 dynamic
+  vsan 11 wwn 10:00:00:00:c9:95:72:06 fcid 0x470092 dynamic
+  vsan 11 wwn 50:01:43:80:06:37:98:e0 fcid 0x470093 dynamic
+  vsan 11 wwn 50:01:43:80:06:37:99:b0 fcid 0x470094 dynamic
+  vsan 11 wwn 50:01:43:80:09:2a:24:f6 fcid 0x470095 dynamic
+  vsan 11 wwn 50:01:43:80:09:2a:24:f4 fcid 0x470096 dynamic
+  vsan 11 wwn 50:01:43:80:11:00:17:28 fcid 0x470097 dynamic
+  vsan 11 wwn 50:01:43:80:11:00:0d:a4 fcid 0x470098 dynamic
+  vsan 11 wwn 50:01:43:80:11:00:0e:70 fcid 0x470099 dynamic
+  vsan 11 wwn 50:01:43:80:11:00:17:94 fcid 0x47009a dynamic
+  vsan 11 wwn 50:01:43:80:01:31:0a:40 fcid 0x47009b dynamic
+  vsan 11 wwn 50:01:43:80:01:31:0e:ce fcid 0x47009c dynamic
+  vsan 11 wwn 50:01:43:80:06:37:91:00 fcid 0x47009d dynamic
+  vsan 11 wwn 50:01:43:80:01:31:0e:dc fcid 0x47009e dynamic
+  vsan 12 wwn 10:00:00:00:c9:6d:cf:6a fcid 0x470026 dynamic
+  vsan 11 wwn 50:01:43:80:12:0e:0b:f4 fcid 0x47009f dynamic
+  vsan 11 wwn 50:01:43:80:03:3a:74:e4 fcid 0x4700a0 dynamic
+  vsan 11 wwn 50:01:43:80:03:3a:74:e6 fcid 0x4700a1 dynamic
+  vsan 11 wwn 10:00:00:00:c9:4a:82:58 fcid 0x4700a2 dynamic
+  vsan 11 wwn 10:00:00:00:c9:4f:22:97 fcid 0x4700a3 dynamic
+  vsan 11 wwn 50:01:43:80:16:76:e4:d0 fcid 0x4700a4 dynamic
+  vsan 12 wwn 50:01:43:80:16:76:e6:a6 fcid 0x470027 dynamic
+  vsan 11 wwn 50:01:43:80:16:76:e6:a4 fcid 0x4700a5 dynamic
+  vsan 11 wwn 50:01:43:80:12:09:4e:6a fcid 0x4700a6 dynamic
+  vsan 12 wwn 50:01:43:80:12:09:4c:1e fcid 0x470028 dynamic
+  vsan 11 wwn 50:01:43:80:12:09:4e:72 fcid 0x4700a7 dynamic
+  vsan 12 wwn 50:01:43:80:09:57:ad:6a fcid 0x470029 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ee:c4:68 fcid 0x4700a8 dynamic
+  vsan 11 wwn 10:00:00:00:c9:bd:b7:4b fcid 0x4700a9 dynamic
+  vsan 11 wwn 50:01:43:80:16:76:e6:d8 fcid 0x4700aa dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:3a:58 fcid 0x4700ab dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:36:11 fcid 0x4700ac dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:97:e0 fcid 0x4700ad dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:96:7e fcid 0x4700ae dynamic
+  vsan 11 wwn 10:00:00:00:c9:95:ff:a4 fcid 0x4700af dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:7a:b2 fcid 0x4700b0 dynamic
+  vsan 11 wwn 10:00:00:00:c9:e7:55:72 fcid 0x4700b1 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:5a:30 fcid 0x4700b2 dynamic
+  vsan 11 wwn 10:00:00:00:c9:a5:53:4a fcid 0x4700b3 dynamic
+  vsan 11 wwn 10:00:00:00:c9:e7:55:16 fcid 0x4700b4 dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:36:10 fcid 0x4700b5 dynamic
+  vsan 12 wwn 10:00:00:00:c9:e8:36:11 fcid 0x47002a dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:af:14 fcid 0x4700b6 dynamic
+  vsan 11 wwn 22:97:00:05:73:ad:ec:80 fcid 0x472100 area dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:b0:2a fcid 0x4700b7 dynamic
+  vsan 11 wwn 22:58:00:05:73:ad:ec:80 fcid 0x472200 area dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:b0:24 fcid 0x4700b8 dynamic
+  vsan 11 wwn 10:00:00:00:c9:89:b7:08 fcid 0x4700b9 dynamic
+  vsan 11 wwn 50:01:43:80:12:09:4b:92 fcid 0x4700ba dynamic
+  vsan 11 wwn 50:01:43:80:12:09:4b:ca fcid 0x4700bb dynamic
+  vsan 11 wwn 50:01:43:80:06:38:22:b8 fcid 0x4700bc dynamic
+  vsan 11 wwn 50:01:43:80:06:38:24:84 fcid 0x4700bd dynamic
+  vsan 11 wwn 50:01:43:80:06:38:24:64 fcid 0x4700be dynamic
+  vsan 11 wwn 50:01:43:80:06:34:54:78 fcid 0x4700bf dynamic
+  vsan 11 wwn 50:01:43:80:06:34:53:c4 fcid 0x4700c0 dynamic
+  vsan 12 wwn 22:08:00:05:73:ad:ec:80 fcid 0x470500 area dynamic
+  vsan 12 wwn 10:00:00:00:c9:89:b7:09 fcid 0x47002b dynamic
+  vsan 11 wwn 50:01:43:80:06:38:23:ac fcid 0x4700c1 dynamic
+  vsan 11 wwn 50:01:43:80:01:31:15:82 fcid 0x4700c2 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:8d:26 fcid 0x4700c3 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:50:c6 fcid 0x4700c4 dynamic
+  vsan 12 wwn 10:00:00:90:fa:07:50:c7 fcid 0x47002c dynamic
+  vsan 11 wwn 10:00:00:00:c9:ce:f9:48 fcid 0x4700c5 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ce:f8:de fcid 0x4700c6 dynamic
+  vsan 11 wwn 50:01:43:80:06:38:21:ac fcid 0x4700c7 dynamic
+  vsan 11 wwn 50:01:43:80:12:0e:0d:68 fcid 0x4700c8 dynamic
+  vsan 12 wwn 10:00:00:00:c9:ce:f9:49 fcid 0x47002d dynamic
+  vsan 11 wwn 50:01:43:80:21:dc:14:44 fcid 0x4700c9 dynamic
+  vsan 12 wwn 50:01:43:80:21:dc:17:ba fcid 0x47002e dynamic
+  vsan 11 wwn 50:01:43:80:21:dc:12:00 fcid 0x4700ca dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:96:06 fcid 0x4700cb dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8c:e8 fcid 0x4700cc dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8a:90 fcid 0x4700cd dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:92:e4 fcid 0x4700ce dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8f:ea fcid 0x4700cf dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:96:ae fcid 0x4700d0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:96:60 fcid 0x4700d1 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:96:02 fcid 0x4700d2 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:90:76 fcid 0x4700d3 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8f:6a fcid 0x4700d4 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8b:ce fcid 0x4700d5 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8d:22 fcid 0x4700d6 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:90:98 fcid 0x4700d7 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8c:d4 fcid 0x4700d8 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:c0:28 fcid 0x4700d9 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8f:66 fcid 0x4700da dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:91:26 fcid 0x4700db dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:59:3a fcid 0x4700dc dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:90:6e fcid 0x4700dd dynamic
+  vsan 11 wwn 10:00:00:00:c9:cf:d2:5e fcid 0x4700de dynamic
+  vsan 11 wwn 10:00:00:00:c9:cf:c2:ea fcid 0x4700df dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:08:e8 fcid 0x4700e0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:05:12:de fcid 0x4700e1 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:56:12 fcid 0x4700e2 dynamic
+  vsan 12 wwn 10:00:00:90:fa:07:8d:27 fcid 0x47002f dynamic
+  vsan 11 wwn 50:01:43:80:12:09:4c:84 fcid 0x4700e3 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ff:6a:50 fcid 0x4700e4 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ff:ce:50 fcid 0x4700e5 dynamic
+  vsan 11 wwn 10:00:00:90:fa:08:5c:70 fcid 0x4700e6 dynamic
+  vsan 11 wwn 10:00:00:90:fa:08:57:a6 fcid 0x4700e7 dynamic
+  vsan 11 wwn 10:00:00:90:fa:08:5d:8e fcid 0x4700e8 dynamic
+  vsan 11 wwn 10:00:00:90:fa:08:5c:98 fcid 0x4700e9 dynamic
+  vsan 12 wwn 10:00:00:00:c9:ff:ce:51 fcid 0x470030 dynamic
+  vsan 12 wwn 10:00:00:90:fa:07:08:e9 fcid 0x470031 dynamic
+  vsan 11 wwn 50:01:43:80:21:dc:23:88 fcid 0x4700ea dynamic
+  vsan 11 wwn 50:01:43:80:21:dc:16:dc fcid 0x4700eb dynamic
+  vsan 11 wwn 10:00:00:00:c9:cf:84:12 fcid 0x472300 dynamic
+  vsan 12 wwn 10:00:00:00:c9:cf:84:13 fcid 0x470040 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:8a:3a fcid 0x472320 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:8a:8e fcid 0x472321 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:89:e2 fcid 0x472340 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:89:6a fcid 0x472360 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:8a:32 fcid 0x472380 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:96:18 fcid 0x4723a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8b:32 fcid 0x4723c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:e2:f8 fcid 0x472400 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:ed:60 fcid 0x472420 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:b7:72 fcid 0x472440 dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:7e:e2 fcid 0x472460 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:67:70 fcid 0x472480 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:11:1c fcid 0x4724a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0b:f6:74 fcid 0x4724c0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:0e:ed:61 fcid 0x470060 dynamic
+  vsan 12 wwn 10:00:00:90:fa:0e:e2:f9 fcid 0x470080 dynamic
+  vsan 11 wwn 10:00:00:90:fa:10:59:a2 fcid 0x472500 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:57:ea fcid 0x472520 dynamic
+  vsan 11 wwn 10:00:00:00:c9:e8:7a:9c fcid 0x472540 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ff:c9:e8 fcid 0x472560 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ff:de:52 fcid 0x472580 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1c:e0:0e fcid 0x4725a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:13:42:7a fcid 0x4724c1 dynamic
+  vsan 12 wwn 50:01:43:80:12:09:4b:ca fcid 0x4700a0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:10:59:c2 fcid 0x4700c0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:1c:f7:0c fcid 0x470600 dynamic
+  vsan 12 wwn 10:00:00:00:c9:ff:df:44 fcid 0x470620 dynamic
+  vsan 12 wwn 10:00:00:90:fa:1e:f9:90 fcid 0x470640 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:1d:22 fcid 0x4725c0 dynamic
+  vsan 11 wwn 50:01:43:80:12:0d:43:54 fcid 0x472600 dynamic
+  vsan 11 wwn 50:01:43:80:06:38:24:9c fcid 0x472620 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:8c:58 fcid 0x472640 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:c5:7e fcid 0x472660 dynamic
+  vsan 11 wwn 50:01:43:80:24:25:f1:ec fcid 0x472680 dynamic
+  vsan 11 wwn 50:01:43:80:24:25:e8:e8 fcid 0x4726a0 dynamic
+  vsan 12 wwn 50:01:43:80:06:38:24:3c fcid 0x470660 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ff:5a:58 fcid 0x4726c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0d:f0:10 fcid 0x472700 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ff:66:e4 fcid 0x472720 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:55:a0 fcid 0x472740 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:57:00 fcid 0x472760 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0d:1a:a6 fcid 0x472780 dynamic
+  vsan 11 wwn 10:00:00:00:c9:ff:58:bb fcid 0x4727a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:55:a3 fcid 0x4727a1 dynamic
+  vsan 12 wwn 10:00:00:90:fa:0e:55:a3 fcid 0x470680 dynamic
+  vsan 11 wwn 10:00:00:90:fa:3b:28:56 fcid 0x4727c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:3b:1b:04 fcid 0x472800 dynamic
+  vsan 11 wwn 10:00:00:90:fa:05:0e:fc fcid 0x472820 dynamic
+  vsan 11 wwn 10:00:00:00:c9:72:cb:54 fcid 0x472840 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:04:c8 fcid 0x472860 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:09:c2 fcid 0x472880 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:05:3e fcid 0x4728a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:21:5e fcid 0x4728c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:08:fa fcid 0x472900 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:0b:06 fcid 0x472920 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:05:e0 fcid 0x472940 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:24:c6 fcid 0x472960 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:05:62 fcid 0x472941 dynamic
+  vsan 11 wwn 10:00:00:90:fa:71:65:b8 fcid 0x472980 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:04:a4 fcid 0x4729a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:04:7c fcid 0x4729c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:09:0e fcid 0x472a00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:1c:fc fcid 0x472a20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:21:18 fcid 0x472a40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:48:e7:94 fcid 0x472a21 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:05:50 fcid 0x472a60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:28:b0 fcid 0x472a80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:19:8a fcid 0x472aa0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:1b:70 fcid 0x472ac0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:01:74 fcid 0x472b00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:24:8c fcid 0x472b20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2b:72 fcid 0x472b40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:03:e8 fcid 0x472b60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:07:90 fcid 0x472b80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:4a:8e fcid 0x472ba0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:26:24 fcid 0x472bc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:08:ae fcid 0x472c00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:09:76 fcid 0x472c20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:25:02 fcid 0x472c40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2a:98 fcid 0x472c60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:29:2e fcid 0x472c80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:28:aa fcid 0x472ca0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:07:d2 fcid 0x472cc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2a:96 fcid 0x472d00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2a:64 fcid 0x472d20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:71:63:b4 fcid 0x472d40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:34:00 fcid 0x472d60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:31:54 fcid 0x472d80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:26:12 fcid 0x472da0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2a:2e fcid 0x472dc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:06:d8 fcid 0x472e00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:04:d8 fcid 0x472e20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:05:5a fcid 0x472e40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:1d:14 fcid 0x472e60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:05:20 fcid 0x472e80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:1f:68 fcid 0x472ea0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:09:2a fcid 0x472ec0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:22:a4 fcid 0x472f00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:48:e2:00 fcid 0x472f20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:1f:52 fcid 0x472f40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:21:84 fcid 0x472f60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2b:a8 fcid 0x472f80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:05:e2 fcid 0x472fa0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2b:a4 fcid 0x472fc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:0b:42 fcid 0x473000 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:29:86 fcid 0x473020 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:0e:f2 fcid 0x473040 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:2e:94 fcid 0x473060 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:28:58 fcid 0x473080 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:26:cc fcid 0x4730a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2b:a0 fcid 0x4730c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:2b:22 fcid 0x473100 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:06:d6 fcid 0x473120 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:2a:2a fcid 0x473140 dynamic
+  vsan 11 wwn 10:00:00:90:fa:71:6d:ea fcid 0x473160 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:25:78 fcid 0x473180 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:4a:9a fcid 0x4731a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:25:a4 fcid 0x4731c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:0b:26 fcid 0x473200 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:08:ca fcid 0x473220 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:3e:e6 fcid 0x473240 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:61:54 fcid 0x473260 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:28:be fcid 0x473280 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:06:60 fcid 0x4732a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:20:66 fcid 0x4732c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:41:fa fcid 0x473300 dynamic
+  vsan 11 wwn 10:00:00:90:fa:6b:29:f4 fcid 0x473320 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:d2:6a fcid 0x473340 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:11:12 fcid 0x473360 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:1e:26 fcid 0x473380 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e5:00:00 fcid 0x473121 dynamic
+  vsan 11 wwn c0:50:76:08:10:07:00:00 fcid 0x4730a1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e5:00:02 fcid 0x473141 dynamic
+  vsan 11 wwn c0:50:76:08:10:07:00:02 fcid 0x473081 dynamic
+  vsan 11 wwn c0:50:76:08:10:06:00:00 fcid 0x473041 dynamic
+  vsan 11 wwn c0:50:76:08:10:06:00:02 fcid 0x473061 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e9:00:00 fcid 0x4730c1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e9:00:02 fcid 0x473101 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ef:00:00 fcid 0x472f61 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ec:00:00 fcid 0x473001 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ef:00:02 fcid 0x472fa1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ec:00:02 fcid 0x473021 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e7:00:00 fcid 0x472f81 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e8:00:00 fcid 0x472f01 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e7:00:02 fcid 0x472fc1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e8:00:02 fcid 0x472f41 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e7:00:08 fcid 0x472f82 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e8:00:08 fcid 0x472f02 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e7:00:0a fcid 0x472fc2 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e8:00:0a fcid 0x472f42 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:00 fcid 0x472e41 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:00 fcid 0x472ec1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:02 fcid 0x472e61 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:02 fcid 0x472f21 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:00 fcid 0x472e01 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:02 fcid 0x472e21 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:00 fcid 0x472e81 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:02 fcid 0x472ea1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:08 fcid 0x472ec2 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:0a fcid 0x472f22 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:08 fcid 0x472e42 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:0a fcid 0x472e62 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:08 fcid 0x472e02 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:0a fcid 0x472e22 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:08 fcid 0x472e82 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:0a fcid 0x472ea2 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ef:00:08 fcid 0x472f62 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ec:00:08 fcid 0x473002 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ef:00:0a fcid 0x472fa2 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ec:00:0a fcid 0x473022 dynamic
+  vsan 11 wwn c0:50:76:08:10:06:00:08 fcid 0x473042 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e9:00:08 fcid 0x4730c2 dynamic
+  vsan 11 wwn c0:50:76:08:10:06:00:0a fcid 0x473062 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e9:00:0a fcid 0x473102 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:00 fcid 0x473161 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:02 fcid 0x473181 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:00 fcid 0x473221 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:02 fcid 0x4731c1 dynamic
+  vsan 11 wwn c0:50:76:08:10:06:00:10 fcid 0x473043 dynamic
+  vsan 11 wwn c0:50:76:08:10:06:00:12 fcid 0x473063 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e9:00:10 fcid 0x4730c3 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e9:00:12 fcid 0x473103 dynamic
+  vsan 11 wwn c0:50:76:08:10:07:00:08 fcid 0x4730a2 dynamic
+  vsan 11 wwn c0:50:76:08:10:07:00:0a fcid 0x473082 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e5:00:08 fcid 0x473122 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e5:00:0a fcid 0x473142 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:10 fcid 0x472ec3 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:10 fcid 0x472e43 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:12 fcid 0x472f23 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:12 fcid 0x472e63 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:10 fcid 0x472e83 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:10 fcid 0x472e03 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:12 fcid 0x472ea3 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:12 fcid 0x472e23 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:18 fcid 0x472ec4 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:18 fcid 0x472e44 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:1a fcid 0x472f24 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:1a fcid 0x472e64 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:18 fcid 0x472e04 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:1a fcid 0x472e24 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:18 fcid 0x472e84 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:1a fcid 0x472ea4 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f5:00:00 fcid 0x4732a1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f5:00:02 fcid 0x473281 dynamic
+  vsan 11 wwn c0:50:76:08:10:03:00:00 fcid 0x4731a1 dynamic
+  vsan 11 wwn c0:50:76:08:10:03:00:02 fcid 0x473201 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f5:00:08 fcid 0x4732a2 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f5:00:0a fcid 0x473282 dynamic
+  vsan 11 wwn c0:50:76:08:10:03:00:08 fcid 0x4731a2 dynamic
+  vsan 11 wwn c0:50:76:08:10:03:00:0a fcid 0x473202 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:08 fcid 0x473162 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:0a fcid 0x473182 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:08 fcid 0x473222 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:0a fcid 0x4731c2 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fc:00:00 fcid 0x473261 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fb:00:00 fcid 0x473321 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fc:00:02 fcid 0x473241 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fb:00:02 fcid 0x473341 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:00 fcid 0x473361 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:00 fcid 0x4732c1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:02 fcid 0x473381 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:02 fcid 0x473301 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e8:00:10 fcid 0x472f03 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e8:00:12 fcid 0x472f43 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e7:00:10 fcid 0x472f83 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e7:00:12 fcid 0x472fc3 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:10 fcid 0x473163 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:10 fcid 0x473223 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:12 fcid 0x473183 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:12 fcid 0x4731c3 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:18 fcid 0x473224 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:1a fcid 0x4731c4 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:18 fcid 0x473164 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:1a fcid 0x473184 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fc:00:08 fcid 0x473262 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fc:00:0a fcid 0x473242 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fb:00:08 fcid 0x473322 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fb:00:0a fcid 0x473342 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:08 fcid 0x473362 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:0a fcid 0x473382 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:08 fcid 0x4732c2 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:0a fcid 0x473302 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:10 fcid 0x4732c3 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:12 fcid 0x473303 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:10 fcid 0x473363 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:12 fcid 0x473383 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:20 fcid 0x473225 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:22 fcid 0x4731c5 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:20 fcid 0x473165 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:22 fcid 0x473185 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:28 fcid 0x473166 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:2a fcid 0x473186 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:28 fcid 0x473226 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:2a fcid 0x4731c6 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fc:00:10 fcid 0x473263 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fb:00:10 fcid 0x473323 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fc:00:12 fcid 0x473243 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fb:00:12 fcid 0x473343 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:18 fcid 0x4732c4 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:1a fcid 0x473304 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:18 fcid 0x473364 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:1a fcid 0x473384 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:20 fcid 0x472e05 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:20 fcid 0x472e85 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:22 fcid 0x472e25 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:22 fcid 0x472ea5 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:20 fcid 0x4732c5 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:22 fcid 0x473305 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:20 fcid 0x473365 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:22 fcid 0x473385 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:20 fcid 0x472e45 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:20 fcid 0x472ec5 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:22 fcid 0x472e65 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:22 fcid 0x472f25 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:28 fcid 0x472ec6 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:28 fcid 0x472e46 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:2a fcid 0x472f26 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:2a fcid 0x472e66 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:28 fcid 0x473366 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:28 fcid 0x4732c6 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fa:00:2a fcid 0x473386 dynamic
+  vsan 11 wwn c0:50:76:08:10:00:00:2a fcid 0x473306 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:86:90 fcid 0x4733a0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:89:4c fcid 0x4733c0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:88:7c fcid 0x473400 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:86:98 fcid 0x473420 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:89:e8 fcid 0x473440 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:89:ac fcid 0x473460 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:87:0c fcid 0x473480 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:8b:0c fcid 0x4734a0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:87:c8 fcid 0x4734c0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:8b:64 fcid 0x473500 dynamic
+  vsan 11 wwn 21:00:00:24:ff:5b:12:b8 fcid 0x473520 dynamic
+  vsan 11 wwn 21:00:00:24:ff:5b:15:f2 fcid 0x473540 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:09:10 fcid 0x473560 dynamic
+  vsan 11 wwn 10:00:00:90:fa:05:1f:3e fcid 0x473580 dynamic
+  vsan 11 wwn 10:00:00:90:fa:04:eb:66 fcid 0x473581 dynamic
+  vsan 11 wwn 10:00:00:90:fa:05:1f:3f fcid 0x473582 dynamic
+  vsan 11 wwn 10:00:00:90:fa:04:eb:67 fcid 0x473583 dynamic
+  vsan 11 wwn 50:01:43:80:02:9d:23:e4 fcid 0x4735a0 dynamic
+  vsan 1 wwn 10:00:00:00:c9:a5:6d:e8 fcid 0xd90020 dynamic
+  vsan 1 wwn 10:00:00:00:c9:a7:19:dc fcid 0xd90040 dynamic
+  vsan 1 wwn 10:00:00:00:c9:a5:6d:e9 fcid 0xd90060 dynamic
+  vsan 1 wwn 10:00:00:00:c9:74:5d:56 fcid 0xd90080 dynamic
+  vsan 1 wwn 10:00:00:00:c9:cf:84:13 fcid 0xd900a0 dynamic
+  vsan 1 wwn 10:00:00:90:fa:08:57:a6 fcid 0xd900c0 dynamic
+  vsan 1 wwn 50:01:43:80:12:09:4e:6a fcid 0xd90100 dynamic
+  vsan 1 wwn 50:01:43:80:12:09:4c:1e fcid 0xd90120 dynamic
+  vsan 1 wwn 10:00:00:00:c9:a5:5f:ac fcid 0xd90140 dynamic
+  vsan 1 wwn 10:00:00:00:c9:74:eb:17 fcid 0xd90160 dynamic
+  vsan 1 wwn 10:00:00:00:c9:89:b7:09 fcid 0xd90180 dynamic
+  vsan 1 wwn 50:01:43:80:21:dc:17:ba fcid 0xd901a0 dynamic
+  vsan 1 wwn 10:00:00:00:c9:ff:6a:50 fcid 0xd901c0 dynamic
+  vsan 1 wwn 10:00:00:00:c9:74:f0:ca fcid 0xd90200 dynamic
+  vsan 1 wwn 50:01:43:80:02:52:35:96 fcid 0xd90220 dynamic
+  vsan 1 wwn 50:01:43:80:02:52:30:68 fcid 0xd90240 dynamic
+  vsan 1 wwn 50:01:43:80:02:52:35:a2 fcid 0xd90260 dynamic
+  vsan 11 wwn 10:00:00:90:fa:50:b5:00 fcid 0x473187 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:dd:64 fcid 0x4735c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:48:e7:90 fcid 0x473600 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:49:fa fcid 0x473620 dynamic
+  vsan 11 wwn 10:00:00:90:fa:71:74:24 fcid 0x473640 dynamic
+  vsan 11 wwn 10:00:00:90:fa:71:4e:c8 fcid 0x473660 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:3e:ce fcid 0x473680 dynamic
+  vsan 11 wwn 10:00:00:90:fa:7b:26:ea fcid 0x4736a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:ca:42 fcid 0x4736c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:cd:06 fcid 0x473700 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:47:d6 fcid 0x473720 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:44:96 fcid 0x473740 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:cc:36 fcid 0x473760 dynamic
+  vsan 11 wwn 10:00:00:90:fa:56:ca:66 fcid 0x473780 dynamic
+  vsan 11 wwn 10:00:00:90:fa:70:c5:08 fcid 0x4737a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:71:74:54 fcid 0x4737c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:57:08:ee fcid 0x473800 dynamic
+  vsan 11 wwn c0:50:76:08:10:09:00:00 fcid 0x473621 dynamic
+  vsan 11 wwn c0:50:76:08:10:09:00:02 fcid 0x473701 dynamic
+  vsan 11 wwn c0:50:76:08:10:02:00:00 fcid 0x4737c1 dynamic
+  vsan 11 wwn c0:50:76:08:10:02:00:02 fcid 0x4736c1 dynamic
+  vsan 11 wwn c0:50:76:08:10:09:00:08 fcid 0x473622 dynamic
+  vsan 11 wwn c0:50:76:08:10:02:00:08 fcid 0x4737c2 dynamic
+  vsan 11 wwn c0:50:76:08:10:09:00:0a fcid 0x473702 dynamic
+  vsan 11 wwn c0:50:76:08:10:02:00:0a fcid 0x4736c2 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fe:00:00 fcid 0x473641 dynamic
+  vsan 11 wwn c0:50:76:08:10:01:00:00 fcid 0x4737a1 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fe:00:02 fcid 0x4735c1 dynamic
+  vsan 11 wwn c0:50:76:08:10:01:00:02 fcid 0x473761 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fe:00:08 fcid 0x473642 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fe:00:0a fcid 0x4735c2 dynamic
+  vsan 11 wwn c0:50:76:08:10:01:00:08 fcid 0x4737a2 dynamic
+  vsan 11 wwn c0:50:76:08:10:01:00:0a fcid 0x473762 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:18:de fcid 0x473820 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:4c:c4 fcid 0x473840 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:1d:52 fcid 0x4706a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:0d:44 fcid 0x473860 dynamic
+  vsan 11 wwn 10:00:00:90:fa:9f:69:b0 fcid 0x473880 dynamic
+  vsan 11 wwn 10:00:00:90:fa:9f:72:16 fcid 0x4738a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a3:7d:ec fcid 0x4738c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:9f:6c:b0 fcid 0x473900 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:46 fcid 0x473920 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1c:5c fcid 0x473940 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1a:ae fcid 0x473960 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:4a:5c fcid 0x473980 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1f:3e fcid 0x4739a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1f:de fcid 0x4739c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:20:ec fcid 0x473a00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:20:2c fcid 0x473a20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1f:3c fcid 0x473a40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:20:34 fcid 0x473a60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:72 fcid 0x473a80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:31:22 fcid 0x473aa0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:35:34 fcid 0x473ac0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:30:5c fcid 0x473b00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:35:38 fcid 0x473b20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:ad:8b:e4 fcid 0x473b40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:9f:74:d4 fcid 0x473b60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:9f:71:ec fcid 0x473b80 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:18:40 fcid 0x4706c0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:1b:48 fcid 0x470700 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:1e:ec fcid 0x470720 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:1a:cc fcid 0x470740 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:18:0c fcid 0x470760 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:1e:22 fcid 0x470780 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:43:2c fcid 0x4707a0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:4a:66 fcid 0x4707c0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:44:48 fcid 0x470800 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:44:60 fcid 0x470820 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:44:00 fcid 0x470840 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:43:56 fcid 0x470860 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:4c:6a fcid 0x470880 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:1c:6e fcid 0x4708a0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:47:46 fcid 0x4708c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:26:8e fcid 0x473ba0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:33:aa fcid 0x472621 dynamic
+  vsan 12 wwn 10:00:00:90:fa:a7:34:da fcid 0x470900 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:ce fcid 0x472601 dynamic
+  vsan 12 wwn 10:00:00:90:fa:a7:34:26 fcid 0x470920 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:49:74 fcid 0x473bc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:49:1a fcid 0x473c00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1a:68 fcid 0x473c20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:18:6c fcid 0x473c40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:39:98 fcid 0x473c60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:49:24 fcid 0x473c80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:19:f6 fcid 0x473ca0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:48:44 fcid 0x473cc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:4a fcid 0x473d00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:38 fcid 0x473d20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:42:d8 fcid 0x473d40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:47:22 fcid 0x473d60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:78 fcid 0x473d80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:49:46 fcid 0x473da0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1d:64 fcid 0x473dc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1d:e4 fcid 0x473e00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:27:b8 fcid 0x473e20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1f:42 fcid 0x473e40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:50 fcid 0x473e60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a3:7c:9c fcid 0x473e80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1f:4c fcid 0x473ea0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a3:8a:42 fcid 0x473ec0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:f8 fcid 0x473f00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1d:34 fcid 0x473f20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:32:24 fcid 0x473f40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1d:52 fcid 0x473f60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:31:6c fcid 0x473f80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:30:18 fcid 0x473fa0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:e2 fcid 0x473fc0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:76 fcid 0x474000 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:20:d0 fcid 0x470940 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:18:6e fcid 0x474020 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:03:4b fcid 0x474040 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1f:46 fcid 0x474060 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:48 fcid 0x474080 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:4c:6a fcid 0x4740a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1e:22 fcid 0x4740c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1e:ec fcid 0x474100 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:4a:66 fcid 0x474120 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:47:46 fcid 0x474140 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:18:0c fcid 0x474160 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:2c fcid 0x474180 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:34:da fcid 0x4741a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:60 fcid 0x4741c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:00 fcid 0x474200 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:48 fcid 0x474220 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:18:40 fcid 0x474240 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:56 fcid 0x474260 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1a:cc fcid 0x474280 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1c:6e fcid 0x4742a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:20:d0 fcid 0x4742c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:03:4a fcid 0x474041 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:18:7e fcid 0x474300 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:43:46 fcid 0x470921 dynamic
+  vsan 11 wwn 10:00:00:90:fa:a7:34:26 fcid 0x474320 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:00 fcid 0x474042 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:00 fcid 0x4738a1 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:02 fcid 0x473901 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:02 fcid 0x473b81 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:bf:7c fcid 0x474340 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:18:e4 fcid 0x474360 dynamic
+  vsan 11 wwn c0:50:76:08:b1:25:00:00 fcid 0x474261 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2c:00:00 fcid 0x474281 dynamic
+  vsan 11 wwn c0:50:76:08:b1:25:00:02 fcid 0x4742a1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2c:00:02 fcid 0x4742c1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:24:00:00 fcid 0x473941 dynamic
+  vsan 11 wwn c0:50:76:08:b1:24:00:02 fcid 0x474301 dynamic
+  vsan 11 wwn c0:50:76:08:b1:26:00:00 fcid 0x473981 dynamic
+  vsan 11 wwn c0:50:76:08:b1:26:00:02 fcid 0x473a01 dynamic
+  vsan 11 wwn 10:00:00:00:c9:f6:0b:94 fcid 0x474380 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:00 fcid 0x473e81 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:02 fcid 0x473f21 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:00 fcid 0x473ca1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:02 fcid 0x473bc1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:10 fcid 0x473c81 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:12 fcid 0x473c41 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:00 fcid 0x473e61 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:02 fcid 0x473ea1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:08 fcid 0x473c82 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:0a fcid 0x473c42 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:00 fcid 0x473c83 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:02 fcid 0x473c43 dynamic
+  vsan 11 wwn 10:00:00:00:c9:fd:54:be fcid 0x4743a0 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:08 fcid 0x473e82 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:0a fcid 0x473f22 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:08 fcid 0x473ca2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:0a fcid 0x473bc2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:00 fcid 0x474001 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:02 fcid 0x474061 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:00 fcid 0x473d41 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:02 fcid 0x473d81 dynamic
+  vsan 11 wwn c0:50:76:08:b1:26:00:08 fcid 0x473982 dynamic
+  vsan 11 wwn c0:50:76:08:b1:26:00:0a fcid 0x473a02 dynamic
+  vsan 11 wwn c0:50:76:08:b1:24:00:08 fcid 0x473942 dynamic
+  vsan 11 wwn c0:50:76:08:b1:24:00:0a fcid 0x474302 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:00 fcid 0x473aa1 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:00 fcid 0x473ac1 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:02 fcid 0x473b41 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:02 fcid 0x473f41 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:10 fcid 0x473ca3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:12 fcid 0x473bc3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:10 fcid 0x473e83 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:12 fcid 0x473f23 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:08 fcid 0x473e62 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:0a fcid 0x473ea2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:18 fcid 0x473c84 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:1a fcid 0x473c44 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2b:00:00 fcid 0x473821 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2b:00:02 fcid 0x473961 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2e:00:00 fcid 0x473a81 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2e:00:02 fcid 0x474021 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:18 fcid 0x473e84 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2a:00:1a fcid 0x473f24 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:18 fcid 0x473ca4 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2f:00:1a fcid 0x473bc4 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2d:00:00 fcid 0x474221 dynamic
+  vsan 11 wwn c0:50:76:08:b1:27:00:00 fcid 0x4741c1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2d:00:02 fcid 0x474241 dynamic
+  vsan 11 wwn c0:50:76:08:b1:27:00:02 fcid 0x474201 dynamic
+  vsan 11 wwn c0:50:76:08:b1:24:00:10 fcid 0x473943 dynamic
+  vsan 11 wwn c0:50:76:08:b1:26:00:10 fcid 0x473983 dynamic
+  vsan 11 wwn c0:50:76:08:b1:24:00:12 fcid 0x474303 dynamic
+  vsan 11 wwn c0:50:76:08:b1:26:00:12 fcid 0x473a03 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:08 fcid 0x4738a2 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:0a fcid 0x473b82 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:08 fcid 0x474043 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:0a fcid 0x473902 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:08 fcid 0x473ac2 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:0a fcid 0x473f42 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:08 fcid 0x473aa2 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:0a fcid 0x473b42 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2d:00:08 fcid 0x474222 dynamic
+  vsan 11 wwn c0:50:76:08:b1:27:00:08 fcid 0x4741c2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2d:00:0a fcid 0x474242 dynamic
+  vsan 11 wwn c0:50:76:08:b1:27:00:0a fcid 0x474202 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2c:00:08 fcid 0x474282 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2c:00:0a fcid 0x4742c2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:25:00:08 fcid 0x474262 dynamic
+  vsan 11 wwn c0:50:76:08:b1:25:00:0a fcid 0x4742a2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:10 fcid 0x473e63 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:12 fcid 0x473ea3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2b:00:08 fcid 0x473822 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2b:00:0a fcid 0x473962 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2e:00:08 fcid 0x473a82 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2e:00:0a fcid 0x474022 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:00 fcid 0x474321 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:00 fcid 0x473e01 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:02 fcid 0x472622 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:02 fcid 0x473d21 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:10 fcid 0x4738a3 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:12 fcid 0x473b83 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:10 fcid 0x474044 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:12 fcid 0x473903 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:18 fcid 0x4738a4 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:18 fcid 0x474045 dynamic
+  vsan 11 wwn c0:50:76:08:af:a5:00:1a fcid 0x473b84 dynamic
+  vsan 11 wwn c0:50:76:08:af:a7:00:1a fcid 0x473904 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:89:6c fcid 0x4743c0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:86:9c fcid 0x474400 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:c6:aa fcid 0x474420 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:1c:34 fcid 0x474440 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:20:66 fcid 0x474460 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:1a fcid 0x474480 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:0a fcid 0x4744a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:68 fcid 0x4744c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:9f:ce:12 fcid 0x474500 dynamic
+  vsan 11 wwn 10:00:00:90:fa:9f:c7:94 fcid 0x474520 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:18:0e fcid 0x474540 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:54 fcid 0x474560 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:1b:c0 fcid 0x474580 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:84 fcid 0x4745a0 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:16:b8 fcid 0x4745c0 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:c7:0c fcid 0x474600 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:4b:ce fcid 0x470960 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:44:6a fcid 0x470980 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:43:50 fcid 0x4709a0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:43:42 fcid 0x4709c0 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:43:6c fcid 0x470922 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:10 fcid 0x473ac3 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:12 fcid 0x473f43 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:10 fcid 0x473aa3 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:12 fcid 0x473b43 dynamic
+  vsan 12 wwn 10:00:00:90:fa:b0:44:20 fcid 0x470a00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:4c:1a:26 fcid 0x474620 dynamic
+  vsan 11 wwn 10:00:00:90:fa:46:09:f6 fcid 0x474640 dynamic
+  vsan 11 wwn 10:00:00:90:fa:4c:1b:de fcid 0x474660 dynamic
+  vsan 11 wwn 10:00:00:90:fa:4c:68:3c fcid 0x474680 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:4b:ce fcid 0x4746a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:50 fcid 0x4746c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:42 fcid 0x474700 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:6a fcid 0x474720 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:43:6c fcid 0x474740 dynamic
+  vsan 11 wwn 10:00:00:90:fa:38:28:de fcid 0x474760 dynamic
+  vsan 11 wwn 10:00:00:90:fa:37:75:3e fcid 0x474780 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b0:44:20 fcid 0x4747a0 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:08 fcid 0x473d42 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:0a fcid 0x473d82 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:08 fcid 0x474002 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:0a fcid 0x474062 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:08 fcid 0x474322 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:08 fcid 0x473e02 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:0a fcid 0x472623 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:0a fcid 0x473d22 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:20 fcid 0x473c85 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:18 fcid 0x473e64 dynamic
+  vsan 11 wwn c0:50:76:08:b1:1c:00:22 fcid 0x473c45 dynamic
+  vsan 11 wwn c0:50:76:08:b1:23:00:1a fcid 0x473ea4 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:b9:e6 fcid 0x4747c0 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:1c:28 fcid 0x474800 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:07 fcid 0x473681 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:03 fcid 0x473682 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:01 fcid 0x473623 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:05 fcid 0x473721 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:07 fcid 0x473801 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:03 fcid 0x473802 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:01 fcid 0x4737c3 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:05 fcid 0x4736a1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:00 fcid 0x474481 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:02 fcid 0x474541 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:00 fcid 0x4744c1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:02 fcid 0x474501 dynamic
+  vsan 11 wwn 10:00:00:90:fa:51:02:3e fcid 0x474820 dynamic
+  vsan 11 wwn 10:00:00:90:fa:2c:e1:6e fcid 0x474840 dynamic
+  vsan 11 wwn 10:00:00:00:c9:fc:b1:92 fcid 0x474860 dynamic
+  vsan 11 wwn 10:00:00:00:c9:fd:1c:a8 fcid 0x474880 dynamic
+  vsan 11 wwn 10:00:00:00:c9:fd:11:80 fcid 0x474881 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:10 fcid 0x474323 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:10 fcid 0x473e03 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:12 fcid 0x472624 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:12 fcid 0x473d23 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:10 fcid 0x473d43 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:10 fcid 0x474003 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:12 fcid 0x473d83 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:12 fcid 0x474063 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:18 fcid 0x474324 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:18 fcid 0x473e04 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:1a fcid 0x472625 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:1a fcid 0x473d24 dynamic
+  vsan 11 wwn c0:50:76:08:10:02:00:10 fcid 0x4737c4 dynamic
+  vsan 11 wwn c0:50:76:08:10:02:00:12 fcid 0x4736c3 dynamic
+  vsan 11 wwn c0:50:76:08:10:09:00:10 fcid 0x473624 dynamic
+  vsan 11 wwn c0:50:76:08:10:09:00:12 fcid 0x473703 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:30 fcid 0x473167 dynamic
+  vsan 11 wwn c0:50:76:08:10:04:00:32 fcid 0x473188 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:30 fcid 0x473227 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fd:00:32 fcid 0x4731c7 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:be:a8 fcid 0x4748a0 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:15:24 fcid 0x4748c0 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:16:80 fcid 0x474900 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:17:b4 fcid 0x474920 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:c6:fa fcid 0x474940 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:1a:f2 fcid 0x474960 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:00 fcid 0x4745a1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:00 fcid 0x474721 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:02 fcid 0x4746c1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:02 fcid 0x474741 dynamic
+  vsan 11 wwn c0:50:76:06:62:6d:00:1d fcid 0x473601 dynamic
+  vsan 11 wwn c0:50:76:06:62:6d:00:1b fcid 0x4735c3 dynamic
+  vsan 11 wwn c0:50:76:06:62:6d:00:19 fcid 0x473602 dynamic
+  vsan 11 wwn c0:50:76:06:62:6d:00:1f fcid 0x473661 dynamic
+  vsan 11 wwn c0:50:76:06:50:74:00:1f fcid 0x473781 dynamic
+  vsan 11 wwn c0:50:76:06:50:74:00:1b fcid 0x473782 dynamic
+  vsan 11 wwn c0:50:76:06:50:74:00:19 fcid 0x4737a3 dynamic
+  vsan 11 wwn c0:50:76:06:50:74:00:1d fcid 0x473741 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:08 fcid 0x474482 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:0a fcid 0x474542 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:08 fcid 0x4744c2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:0a fcid 0x474502 dynamic
+  vsan 11 wwn c0:50:76:06:62:6d:00:18 fcid 0x473643 dynamic
+  vsan 11 wwn c0:50:76:06:62:6d:00:1a fcid 0x4735c4 dynamic
+  vsan 11 wwn c0:50:76:06:50:74:00:18 fcid 0x4737a4 dynamic
+  vsan 11 wwn c0:50:76:06:50:74:00:1a fcid 0x473763 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:18 fcid 0x474004 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a2:00:1a fcid 0x474064 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:18 fcid 0x473d44 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a7:00:1a fcid 0x473d84 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:18 fcid 0x473aa4 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:1a fcid 0x473b44 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:18 fcid 0x473ac4 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:1a fcid 0x473f44 dynamic
+  vsan 11 wwn 10:00:00:90:fa:07:08:d2 fcid 0x474980 dynamic
+  vsan 11 wwn 10:00:00:00:c9:f8:5f:64 fcid 0x474981 dynamic
+  vsan 11 wwn 10:00:00:00:c9:f8:5f:12 fcid 0x4749a0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:05:1e:c4 fcid 0x4749a1 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b8:04:16 fcid 0x472781 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b8:ef:d8 fcid 0x4749c0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:ba:51:06 fcid 0x474a00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b8:03:ba fcid 0x4723a1 dynamic
+  vsan 11 wwn 10:00:00:90:fa:b8:ef:ca fcid 0x474a20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:ba:51:f4 fcid 0x474a40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:ba:51:a4 fcid 0x474a60 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:20 fcid 0x473aa5 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:20 fcid 0x473ac5 dynamic
+  vsan 11 wwn c0:50:76:08:af:a4:00:22 fcid 0x473b45 dynamic
+  vsan 11 wwn c0:50:76:08:af:a9:00:22 fcid 0x473f45 dynamic
+  vsan 11 wwn 10:00:00:90:fa:ba:51:f8 fcid 0x474a80 dynamic
+  vsan 11 wwn c0:50:76:08:e4:d2:00:00 fcid 0x472782 dynamic
+  vsan 11 wwn c0:50:76:08:e4:d2:00:02 fcid 0x4723a2 dynamic
+  vsan 11 wwn c0:50:76:08:e4:d3:00:00 fcid 0x474a21 dynamic
+  vsan 11 wwn c0:50:76:08:e4:d3:00:02 fcid 0x474a81 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:15:12 fcid 0x474aa0 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:1c:b2 fcid 0x474ac0 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:bf:38 fcid 0x474b00 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:1b:ec fcid 0x474b20 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fe:00:10 fcid 0x473644 dynamic
+  vsan 11 wwn c0:50:76:08:0f:fe:00:12 fcid 0x4735c5 dynamic
+  vsan 11 wwn c0:50:76:08:10:01:00:10 fcid 0x4737a5 dynamic
+  vsan 11 wwn c0:50:76:08:10:01:00:12 fcid 0x473764 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:86:94 fcid 0x474b40 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:8a:90 fcid 0x474b60 dynamic
+  vsan 11 wwn 50:01:43:80:26:67:09:54 fcid 0x474b80 dynamic
+  vsan 11 wwn 50:01:43:80:26:67:14:e0 fcid 0x474ba0 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:08 fcid 0x4745a2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:0a fcid 0x4746c2 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:08 fcid 0x474722 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:0a fcid 0x474742 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:10 fcid 0x474723 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:10 fcid 0x4745a3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:12 fcid 0x474743 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:12 fcid 0x4746c3 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:28 fcid 0x472e06 dynamic
+  vsan 11 wwn c0:50:76:08:0f:eb:00:2a fcid 0x472e26 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:28 fcid 0x472e86 dynamic
+  vsan 11 wwn c0:50:76:08:0f:e6:00:2a fcid 0x472ea6 dynamic
+  vsan 11 wwn 50:01:43:80:26:66:fd:bc fcid 0x474bc0 dynamic
+  vsan 11 wwn 50:01:43:80:26:67:14:b0 fcid 0x474c00 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:18 fcid 0x4745a4 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a3:00:1a fcid 0x4746c4 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:18 fcid 0x474724 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a6:00:1a fcid 0x474744 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:0a:7c fcid 0x474c20 dynamic
+  vsan 11 wwn 50:01:43:80:26:67:56:54 fcid 0x474c40 dynamic
+  vsan 12 wwn 10:00:00:00:c9:ff:c9:e9 fcid 0x470a20 dynamic
+  vsan 11 wwn 50:01:43:80:26:66:fd:be fcid 0x474c60 dynamic
+  vsan 11 wwn 50:01:43:80:26:67:14:b2 fcid 0x474c80 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:0b:22 fcid 0x474ca0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:09:f6 fcid 0x474c41 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:09:60 fcid 0x474cc0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:09:62 fcid 0x474d00 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:0b:20 fcid 0x474d20 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:09:f4 fcid 0x474d40 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:0b:ce fcid 0x474d60 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:00:e2 fcid 0x474d80 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:0b:cc fcid 0x474da0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:00:e0 fcid 0x474dc0 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:08:70 fcid 0x474e00 dynamic
+  vsan 11 wwn 50:01:43:80:26:65:08:72 fcid 0x474c21 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:17 fcid 0x474701 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:13 fcid 0x474702 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:11 fcid 0x474725 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a5:00:15 fcid 0x4747a1 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:17 fcid 0x474561 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:13 fcid 0x474562 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:11 fcid 0x4745a5 dynamic
+  vsan 11 wwn c0:50:76:08:b1:ab:00:15 fcid 0x4746a1 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:f5:be fcid 0x474e20 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:e8:ae fcid 0x474e40 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:e2:fa fcid 0x474e60 dynamic
+  vsan 11 wwn 10:00:00:90:fa:0e:e3:6a fcid 0x474e80 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:79:28 fcid 0x474ea0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:64:fa fcid 0x474ec0 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:7c:ca fcid 0x474f00 dynamic
+  vsan 11 wwn 10:00:00:90:fa:1f:7c:c0 fcid 0x474f20 dynamic
+  vsan 11 wwn 50:00:10:a0:00:90:e5:c8 fcid 0x474f40 dynamic
+  vsan 11 wwn 21:00:00:24:ff:89:bf:39 fcid 0x474f60 dynamic
+  vsan 11 wwn 21:00:00:24:ff:8a:1c:b3 fcid 0x474f80 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2c:00:10 fcid 0x474283 dynamic
+  vsan 11 wwn c0:50:76:08:b1:25:00:10 fcid 0x474263 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2c:00:12 fcid 0x4742c3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:25:00:12 fcid 0x4742a3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2d:00:10 fcid 0x474223 dynamic
+  vsan 11 wwn c0:50:76:08:b1:27:00:10 fcid 0x4741c3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:2d:00:12 fcid 0x474243 dynamic
+  vsan 11 wwn c0:50:76:08:b1:27:00:12 fcid 0x474203 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:10 fcid 0x4744c3 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:12 fcid 0x474503 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:10 fcid 0x474483 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:12 fcid 0x474543 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:18 fcid 0x474484 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:1a fcid 0x474544 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:18 fcid 0x4744c4 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:1a fcid 0x474504 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:17 fcid 0x472942 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:13 fcid 0x472943 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:11 fcid 0x472f63 dynamic
+  vsan 11 wwn c0:50:76:08:0f:f0:00:15 fcid 0x472861 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:17 fcid 0x472b21 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:13 fcid 0x472b22 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:11 fcid 0x473003 dynamic
+  vsan 11 wwn c0:50:76:08:0f:ed:00:15 fcid 0x472b01 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:20 fcid 0x474485 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:20 fcid 0x4744c5 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a9:00:22 fcid 0x474545 dynamic
+  vsan 11 wwn c0:50:76:08:b1:a8:00:22 fcid 0x474505 dynamic
+
+
+interface mgmt0
+  ip address 11.155.62.18 255.255.255.0
+
+interface port-channel7
+  fspf cost 13 vsan 1
+  fspf cost 13 vsan 11
+  fspf cost 13 vsan 12
+  switchport mode E
+  switchport speed 8000
+  switchport rate-mode dedicated
+
+interface port-channel107
+  fspf cost 13 vsan 1
+  fspf cost 13 vsan 11
+  fspf cost 13 vsan 12
+  switchport mode E
+  switchport speed 8000
+  switchport rate-mode dedicated
+vsan database
+  vsan 11 interface fc1/1
+  vsan 11 interface fc1/2
+  vsan 11 interface fc1/3
+  vsan 11 interface fc1/4
+  vsan 11 interface fc1/5
+  vsan 12 interface fc1/6
+  vsan 11 interface fc1/7
+  vsan 11 interface fc1/8
+  vsan 11 interface fc1/9
+  vsan 11 interface fc1/10
+  vsan 11 interface fc1/11
+  vsan 11 interface fc1/12
+  vsan 11 interface fc1/13
+  vsan 11 interface fc1/14
+  vsan 11 interface fc1/15
+  vsan 11 interface fc1/16
+  vsan 11 interface fc1/17
+  vsan 11 interface fc1/18
+  vsan 11 interface fc1/19
+  vsan 11 interface fc1/20
+  vsan 11 interface fc1/21
+  vsan 11 interface fc1/22
+  vsan 11 interface fc1/23
+  vsan 11 interface fc1/24
+  vsan 11 interface fc1/25
+  vsan 11 interface fc1/26
+  vsan 11 interface fc1/27
+  vsan 11 interface fc1/28
+  vsan 11 interface fc1/29
+  vsan 11 interface fc1/30
+  vsan 11 interface fc1/31
+  vsan 11 interface fc1/32
+  vsan 11 interface fc1/33
+  vsan 11 interface fc1/34
+  vsan 11 interface fc1/35
+  vsan 11 interface fc1/36
+  vsan 11 interface fc1/37
+  vsan 11 interface fc1/38
+  vsan 11 interface fc1/39
+  vsan 11 interface fc1/40
+  vsan 11 interface fc1/41
+  vsan 11 interface fc1/42
+  vsan 11 interface fc1/43
+  vsan 11 interface fc1/44
+  vsan 11 interface fc1/45
+  vsan 11 interface fc1/46
+  vsan 11 interface fc1/47
+  vsan 11 interface fc1/48
+  vsan 11 interface fc2/1
+  vsan 11 interface fc2/2
+  vsan 11 interface fc2/3
+  vsan 11 interface fc2/4
+  vsan 11 interface fc2/5
+  vsan 11 interface fc2/6
+  vsan 11 interface fc2/7
+  vsan 11 interface fc2/8
+  vsan 11 interface fc2/9
+  vsan 11 interface fc2/10
+  vsan 11 interface fc2/11
+  vsan 11 interface fc2/12
+  vsan 11 interface fc2/13
+  vsan 11 interface fc2/14
+  vsan 11 interface fc2/15
+  vsan 11 interface fc2/16
+  vsan 11 interface fc2/17
+  vsan 11 interface fc2/18
+  vsan 11 interface fc2/19
+  vsan 11 interface fc2/20
+  vsan 11 interface fc2/21
+  vsan 11 interface fc2/22
+  vsan 11 interface fc2/23
+  vsan 11 interface fc2/24
+  vsan 11 interface fc2/25
+  vsan 11 interface fc2/26
+  vsan 11 interface fc2/27
+  vsan 11 interface fc2/28
+  vsan 11 interface fc2/29
+  vsan 11 interface fc2/30
+  vsan 11 interface fc2/31
+  vsan 11 interface fc2/32
+  vsan 11 interface fc2/33
+  vsan 11 interface fc2/34
+  vsan 11 interface fc2/35
+  vsan 11 interface fc2/36
+  vsan 11 interface fc2/37
+  vsan 11 interface fc2/38
+  vsan 11 interface fc2/39
+  vsan 11 interface fc2/40
+  vsan 11 interface fc2/41
+  vsan 11 interface fc2/42
+  vsan 11 interface fc2/43
+  vsan 11 interface fc2/44
+  vsan 11 interface fc2/45
+  vsan 11 interface fc2/46
+  vsan 11 interface fc2/47
+  vsan 11 interface fc2/48
+  vsan 11 interface fc3/1
+  vsan 11 interface fc3/2
+  vsan 11 interface fc3/3
+  vsan 11 interface fc3/4
+  vsan 11 interface fc3/5
+  vsan 11 interface fc3/6
+  vsan 11 interface fc3/7
+  vsan 11 interface fc3/8
+  vsan 11 interface fc3/9
+  vsan 11 interface fc3/10
+  vsan 11 interface fc3/11
+  vsan 11 interface fc3/12
+  vsan 11 interface fc3/13
+  vsan 11 interface fc3/14
+  vsan 11 interface fc3/15
+  vsan 11 interface fc3/16
+  vsan 11 interface fc3/17
+  vsan 11 interface fc3/18
+  vsan 11 interface fc3/19
+  vsan 11 interface fc3/20
+  vsan 11 interface fc3/21
+  vsan 11 interface fc3/22
+  vsan 11 interface fc3/23
+  vsan 11 interface fc3/24
+  vsan 11 interface fc3/25
+  vsan 11 interface fc3/26
+  vsan 11 interface fc3/27
+  vsan 11 interface fc3/28
+  vsan 11 interface fc3/29
+  vsan 11 interface fc3/30
+  vsan 11 interface fc3/31
+  vsan 11 interface fc3/32
+  vsan 11 interface fc3/33
+  vsan 11 interface fc3/34
+  vsan 11 interface fc3/35
+  vsan 11 interface fc3/36
+  vsan 11 interface fc3/37
+  vsan 11 interface fc3/38
+  vsan 11 interface fc3/39
+  vsan 11 interface fc3/40
+  vsan 11 interface fc3/41
+  vsan 11 interface fc3/42
+  vsan 11 interface fc3/43
+  vsan 11 interface fc3/44
+  vsan 11 interface fc3/45
+  vsan 11 interface fc3/46
+  vsan 11 interface fc3/47
+  vsan 11 interface fc3/48
+  vsan 11 interface fc4/1
+  vsan 11 interface fc4/2
+  vsan 11 interface fc4/3
+  vsan 11 interface fc4/4
+  vsan 11 interface fc4/5
+  vsan 11 interface fc4/6
+  vsan 11 interface fc4/7
+  vsan 11 interface fc4/8
+  vsan 11 interface fc4/9
+  vsan 11 interface fc4/10
+  vsan 11 interface fc4/11
+  vsan 11 interface fc4/12
+  vsan 11 interface fc4/13
+  vsan 11 interface fc4/14
+  vsan 11 interface fc4/15
+  vsan 11 interface fc4/16
+  vsan 11 interface fc4/17
+  vsan 11 interface fc4/18
+  vsan 11 interface fc4/19
+  vsan 11 interface fc4/20
+  vsan 11 interface fc4/21
+  vsan 11 interface fc4/22
+  vsan 11 interface fc4/23
+  vsan 11 interface fc4/24
+  vsan 11 interface fc4/25
+  vsan 11 interface fc4/26
+  vsan 11 interface fc4/27
+  vsan 11 interface fc4/28
+  vsan 11 interface fc4/29
+  vsan 11 interface fc4/30
+  vsan 11 interface fc4/31
+  vsan 11 interface fc4/32
+  vsan 11 interface fc4/33
+  vsan 11 interface fc4/34
+  vsan 11 interface fc4/35
+  vsan 11 interface fc4/36
+  vsan 11 interface fc4/37
+  vsan 11 interface fc4/38
+  vsan 11 interface fc4/39
+  vsan 11 interface fc4/40
+  vsan 11 interface fc4/41
+  vsan 11 interface fc4/42
+  vsan 11 interface fc4/43
+  vsan 11 interface fc4/44
+  vsan 11 interface fc4/45
+  vsan 11 interface fc4/46
+  vsan 11 interface fc4/47
+  vsan 11 interface fc4/48
+  vsan 11 interface fc7/3
+  vsan 11 interface fc7/4
+  vsan 11 interface fc7/7
+  vsan 11 interface fc7/8
+  vsan 11 interface fc7/11
+  vsan 11 interface fc7/12
+  vsan 11 interface fc7/15
+  vsan 11 interface fc7/16
+  vsan 11 interface fc7/17
+  vsan 11 interface fc7/18
+  vsan 11 interface fc7/19
+  vsan 11 interface fc7/20
+  vsan 11 interface fc7/21
+  vsan 11 interface fc7/22
+  vsan 11 interface fc7/23
+  vsan 11 interface fc7/24
+  vsan 11 interface fc7/25
+  vsan 11 interface fc7/26
+  vsan 11 interface fc7/27
+  vsan 11 interface fc7/28
+  vsan 11 interface fc7/29
+  vsan 11 interface fc7/30
+  vsan 11 interface fc7/31
+  vsan 11 interface fc7/32
+  vsan 11 interface fc7/33
+  vsan 11 interface fc7/34
+  vsan 11 interface fc7/35
+  vsan 11 interface fc7/36
+  vsan 11 interface fc7/37
+  vsan 11 interface fc7/38
+  vsan 11 interface fc7/39
+  vsan 11 interface fc7/40
+  vsan 11 interface fc7/41
+  vsan 11 interface fc7/42
+  vsan 11 interface fc7/43
+  vsan 11 interface fc7/44
+  vsan 11 interface fc7/45
+  vsan 11 interface fc7/46
+  vsan 11 interface fc7/47
+  vsan 11 interface fc7/48
+  vsan 11 interface fc8/3
+  vsan 11 interface fc8/4
+  vsan 11 interface fc8/7
+  vsan 11 interface fc8/8
+  vsan 11 interface fc8/11
+  vsan 11 interface fc8/12
+  vsan 11 interface fc8/15
+  vsan 11 interface fc8/16
+  vsan 11 interface fc8/17
+  vsan 11 interface fc8/18
+  vsan 11 interface fc8/19
+  vsan 11 interface fc8/20
+  vsan 11 interface fc8/21
+  vsan 11 interface fc8/22
+  vsan 11 interface fc8/23
+  vsan 11 interface fc8/24
+  vsan 11 interface fc8/25
+  vsan 11 interface fc8/26
+  vsan 11 interface fc8/27
+  vsan 11 interface fc8/28
+  vsan 11 interface fc8/29
+  vsan 11 interface fc8/30
+  vsan 11 interface fc8/31
+  vsan 11 interface fc8/32
+  vsan 11 interface fc8/33
+  vsan 11 interface fc8/34
+  vsan 11 interface fc8/35
+  vsan 11 interface fc8/36
+  vsan 11 interface fc8/37
+  vsan 11 interface fc8/38
+  vsan 11 interface fc8/39
+  vsan 11 interface fc8/40
+  vsan 11 interface fc8/41
+  vsan 11 interface fc8/42
+  vsan 11 interface fc8/43
+  vsan 11 interface fc8/44
+  vsan 11 interface fc8/45
+  vsan 11 interface fc8/46
+  vsan 11 interface fc8/47
+  vsan 11 interface fc8/48
+  vsan 11 interface fc9/3
+  vsan 11 interface fc9/4
+  vsan 11 interface fc9/7
+  vsan 11 interface fc9/8
+  vsan 11 interface fc9/11
+  vsan 11 interface fc9/12
+  vsan 11 interface fc9/15
+  vsan 11 interface fc9/16
+  vsan 11 interface fc9/17
+  vsan 11 interface fc9/18
+  vsan 11 interface fc9/19
+  vsan 11 interface fc9/20
+  vsan 11 interface fc9/21
+  vsan 11 interface fc9/22
+  vsan 11 interface fc9/23
+  vsan 11 interface fc9/24
+  vsan 11 interface fc9/25
+  vsan 11 interface fc9/26
+  vsan 11 interface fc9/27
+  vsan 11 interface fc9/28
+  vsan 11 interface fc9/29
+  vsan 11 interface fc9/30
+  vsan 11 interface fc9/31
+  vsan 11 interface fc9/32
+  vsan 11 interface fc9/33
+  vsan 11 interface fc9/34
+  vsan 11 interface fc9/35
+  vsan 11 interface fc9/36
+  vsan 11 interface fc9/37
+  vsan 11 interface fc9/38
+  vsan 11 interface fc9/39
+  vsan 11 interface fc9/40
+  vsan 11 interface fc9/41
+  vsan 11 interface fc9/42
+  vsan 11 interface fc9/43
+  vsan 11 interface fc9/44
+  vsan 11 interface fc9/45
+  vsan 11 interface fc9/46
+  vsan 11 interface fc9/47
+  vsan 11 interface fc9/48
+  vsan 11 interface fc10/3
+  vsan 11 interface fc10/4
+  vsan 11 interface fc10/7
+  vsan 11 interface fc10/8
+  vsan 11 interface fc10/11
+  vsan 11 interface fc10/12
+  vsan 11 interface fc10/15
+  vsan 11 interface fc10/16
+  vsan 11 interface fc10/17
+  vsan 11 interface fc10/18
+  vsan 11 interface fc10/19
+  vsan 11 interface fc10/20
+  vsan 11 interface fc10/21
+  vsan 11 interface fc10/22
+  vsan 11 interface fc10/23
+  vsan 11 interface fc10/24
+  vsan 11 interface fc10/25
+  vsan 11 interface fc10/26
+  vsan 11 interface fc10/27
+  vsan 11 interface fc10/28
+  vsan 11 interface fc10/29
+  vsan 11 interface fc10/30
+  vsan 11 interface fc10/31
+  vsan 11 interface fc10/32
+  vsan 11 interface fc10/33
+  vsan 11 interface fc10/34
+  vsan 11 interface fc10/35
+  vsan 11 interface fc10/36
+  vsan 11 interface fc10/37
+  vsan 11 interface fc10/38
+  vsan 11 interface fc10/39
+  vsan 11 interface fc10/40
+  vsan 11 interface fc10/41
+  vsan 11 interface fc10/42
+  vsan 11 interface fc10/43
+  vsan 11 interface fc10/44
+  vsan 11 interface fc10/45
+  vsan 11 interface fc10/46
+  vsan 11 interface fc10/47
+  vsan 11 interface fc10/48
+
+clock timezone CST 8 0
+switchname YQB-9710-F7HE1
+line console
+line vty
+boot kickstart bootflash:/m9700-sf3ek9-kickstart-mz.6.2.19.bin sup-1
+boot system bootflash:/m9700-sf3ek9-mz.6.2.19.bin sup-1
+boot kickstart bootflash:/m9700-sf3ek9-kickstart-mz.6.2.19.bin sup-2
+boot system bootflash:/m9700-sf3ek9-mz.6.2.19.bin sup-2
+interface fc7/1
+  switchport speed 8000
+interface fc7/2
+  switchport speed 8000
+interface fc7/5
+  switchport speed 8000
+interface fc7/6
+  switchport speed 8000
+interface fc7/9
+  switchport speed 8000
+interface fc7/10
+  switchport speed 8000
+interface fc7/13
+  switchport speed 8000
+interface fc7/14
+  switchport speed 8000
+interface fc8/1
+  switchport speed 8000
+interface fc8/2
+  switchport speed 8000
+interface fc8/5
+  switchport speed 8000
+interface fc8/6
+  switchport speed 8000
+interface fc8/9
+  switchport speed 8000
+interface fc8/10
+  switchport speed 8000
+interface fc8/13
+  switchport speed 8000
+interface fc8/14
+  switchport speed 8000
+interface fc9/1
+  switchport speed 8000
+interface fc9/2
+  switchport speed 8000
+interface fc9/5
+  switchport speed 8000
+interface fc9/6
+  switchport speed 8000
+interface fc9/9
+  switchport speed 8000
+interface fc9/10
+  switchport speed 8000
+interface fc9/13
+  switchport speed 8000
+interface fc9/14
+  switchport speed 8000
+interface fc10/1
+  switchport speed 8000
+interface fc10/2
+  switchport speed 8000
+interface fc10/5
+  switchport speed 8000
+interface fc10/6
+  switchport speed 8000
+interface fc10/9
+  switchport speed 8000
+interface fc10/10
+  switchport speed 8000
+interface fc10/13
+  switchport speed 8000
+interface fc10/14
+  switchport speed 8000
+interface fc1/1
+interface fc1/2
+interface fc1/3
+interface fc1/4
+interface fc1/5
+interface fc1/6
+interface fc1/7
+interface fc1/8
+interface fc1/9
+interface fc1/10
+interface fc1/11
+interface fc1/12
+interface fc1/13
+interface fc1/14
+interface fc1/15
+interface fc1/16
+interface fc1/17
+interface fc1/18
+interface fc1/19
+interface fc1/20
+interface fc1/21
+interface fc1/22
+interface fc1/23
+interface fc1/24
+interface fc1/25
+interface fc1/26
+interface fc1/27
+interface fc1/28
+interface fc1/29
+interface fc1/30
+interface fc1/31
+interface fc1/32
+interface fc1/33
+interface fc1/34
+interface fc1/35
+interface fc1/36
+interface fc1/37
+interface fc1/38
+interface fc1/39
+interface fc1/40
+interface fc1/41
+interface fc1/42
+interface fc1/43
+interface fc1/44
+interface fc1/45
+interface fc1/46
+interface fc1/47
+interface fc1/48
+interface fc2/1
+interface fc2/2
+interface fc2/3
+interface fc2/4
+interface fc2/5
+interface fc2/6
+interface fc2/7
+interface fc2/8
+interface fc2/9
+interface fc2/10
+interface fc2/11
+interface fc2/12
+interface fc2/13
+interface fc2/14
+interface fc2/15
+interface fc2/16
+interface fc2/17
+interface fc2/18
+interface fc2/19
+interface fc2/20
+interface fc2/21
+interface fc2/22
+interface fc2/23
+interface fc2/24
+interface fc2/25
+interface fc2/26
+interface fc2/27
+interface fc2/28
+interface fc2/29
+interface fc2/30
+interface fc2/31
+interface fc2/32
+interface fc2/33
+interface fc2/34
+interface fc2/35
+interface fc2/36
+interface fc2/37
+interface fc2/38
+interface fc2/39
+interface fc2/40
+interface fc2/41
+interface fc2/42
+interface fc2/43
+interface fc2/44
+interface fc2/45
+interface fc2/46
+interface fc2/47
+interface fc2/48
+interface fc3/1
+interface fc3/2
+interface fc3/3
+interface fc3/4
+interface fc3/5
+interface fc3/6
+interface fc3/7
+interface fc3/8
+interface fc3/9
+interface fc3/10
+interface fc3/11
+interface fc3/12
+interface fc3/13
+interface fc3/14
+interface fc3/15
+interface fc3/16
+interface fc3/17
+interface fc3/18
+interface fc3/19
+interface fc3/20
+interface fc3/21
+interface fc3/22
+interface fc3/23
+interface fc3/24
+interface fc3/25
+interface fc3/26
+interface fc3/27
+interface fc3/28
+interface fc3/29
+interface fc3/30
+interface fc3/31
+interface fc3/32
+interface fc3/33
+interface fc3/34
+interface fc3/35
+interface fc3/36
+interface fc3/37
+interface fc3/38
+interface fc3/39
+interface fc3/40
+interface fc3/41
+interface fc3/42
+interface fc3/43
+interface fc3/44
+interface fc3/45
+interface fc3/46
+interface fc3/47
+interface fc3/48
+interface fc4/1
+interface fc4/2
+interface fc4/3
+interface fc4/4
+interface fc4/5
+interface fc4/6
+interface fc4/7
+interface fc4/8
+interface fc4/9
+interface fc4/10
+interface fc4/11
+interface fc4/12
+interface fc4/13
+interface fc4/14
+interface fc4/15
+interface fc4/16
+interface fc4/17
+interface fc4/18
+interface fc4/19
+interface fc4/20
+interface fc4/21
+interface fc4/22
+interface fc4/23
+interface fc4/24
+interface fc4/25
+interface fc4/26
+interface fc4/27
+interface fc4/28
+interface fc4/29
+interface fc4/30
+interface fc4/31
+interface fc4/32
+interface fc4/33
+interface fc4/34
+interface fc4/35
+interface fc4/36
+interface fc4/37
+interface fc4/38
+interface fc4/39
+interface fc4/40
+interface fc4/41
+interface fc4/42
+interface fc4/43
+interface fc4/44
+interface fc4/45
+interface fc4/46
+interface fc4/47
+interface fc4/48
+interface fc7/3
+interface fc7/4
+interface fc7/7
+interface fc7/8
+interface fc7/11
+interface fc7/12
+interface fc7/15
+interface fc7/16
+interface fc7/17
+interface fc7/18
+interface fc7/19
+interface fc7/20
+interface fc7/21
+interface fc7/22
+interface fc7/23
+interface fc7/24
+interface fc7/25
+interface fc7/26
+interface fc7/27
+interface fc7/28
+interface fc7/29
+interface fc7/30
+interface fc7/31
+interface fc7/32
+interface fc7/33
+interface fc7/34
+interface fc7/35
+interface fc7/36
+interface fc7/37
+interface fc7/38
+interface fc7/39
+interface fc7/40
+interface fc7/41
+interface fc7/42
+interface fc7/43
+interface fc7/44
+interface fc7/45
+interface fc7/46
+interface fc7/47
+interface fc7/48
+interface fc7/1
+  switchport mode E
+interface fc7/2
+  switchport mode E
+interface fc7/5
+  switchport mode E
+interface fc7/6
+  switchport mode E
+interface fc7/9
+  switchport mode E
+interface fc7/10
+  switchport mode E
+interface fc7/13
+  switchport mode E
+interface fc7/14
+  switchport mode E
+interface fc8/3
+interface fc8/4
+interface fc8/7
+interface fc8/8
+interface fc8/11
+interface fc8/12
+interface fc8/15
+interface fc8/16
+interface fc8/17
+interface fc8/18
+interface fc8/19
+interface fc8/20
+interface fc8/21
+interface fc8/22
+interface fc8/23
+interface fc8/24
+interface fc8/25
+interface fc8/26
+interface fc8/27
+interface fc8/28
+interface fc8/29
+interface fc8/30
+interface fc8/31
+interface fc8/32
+interface fc8/33
+interface fc8/34
+interface fc8/35
+interface fc8/36
+interface fc8/37
+interface fc8/38
+interface fc8/39
+interface fc8/40
+interface fc8/41
+interface fc8/42
+interface fc8/43
+interface fc8/44
+interface fc8/45
+interface fc8/46
+interface fc8/47
+interface fc8/48
+interface fc8/1
+  switchport mode E
+interface fc8/2
+  switchport mode E
+interface fc8/5
+  switchport mode E
+interface fc8/6
+  switchport mode E
+interface fc8/9
+  switchport mode E
+interface fc8/10
+  switchport mode E
+interface fc8/13
+  switchport mode E
+interface fc8/14
+  switchport mode E
+interface fc9/3
+interface fc9/4
+interface fc9/7
+interface fc9/8
+interface fc9/11
+interface fc9/12
+interface fc9/15
+interface fc9/16
+interface fc9/17
+interface fc9/18
+interface fc9/19
+interface fc9/20
+interface fc9/21
+interface fc9/22
+interface fc9/23
+interface fc9/24
+interface fc9/25
+interface fc9/26
+interface fc9/27
+interface fc9/28
+interface fc9/29
+interface fc9/30
+interface fc9/31
+interface fc9/32
+interface fc9/33
+interface fc9/34
+interface fc9/35
+interface fc9/36
+interface fc9/37
+interface fc9/38
+interface fc9/39
+interface fc9/40
+interface fc9/41
+interface fc9/42
+interface fc9/43
+interface fc9/44
+interface fc9/45
+interface fc9/46
+interface fc9/47
+interface fc9/48
+interface fc9/1
+  switchport mode E
+interface fc9/2
+  switchport mode E
+interface fc9/5
+  switchport mode E
+interface fc9/6
+  switchport mode E
+interface fc9/9
+  switchport mode E
+interface fc9/10
+  switchport mode E
+interface fc9/13
+  switchport mode E
+interface fc9/14
+  switchport mode E
+interface fc10/3
+interface fc10/4
+interface fc10/7
+interface fc10/8
+interface fc10/11
+interface fc10/12
+interface fc10/15
+interface fc10/16
+interface fc10/17
+interface fc10/18
+interface fc10/19
+interface fc10/20
+interface fc10/21
+interface fc10/22
+interface fc10/23
+interface fc10/24
+interface fc10/25
+interface fc10/26
+interface fc10/27
+interface fc10/28
+interface fc10/29
+interface fc10/30
+interface fc10/31
+interface fc10/32
+interface fc10/33
+interface fc10/34
+interface fc10/35
+interface fc10/36
+interface fc10/37
+interface fc10/38
+interface fc10/39
+interface fc10/40
+interface fc10/41
+interface fc10/42
+interface fc10/43
+interface fc10/44
+interface fc10/45
+interface fc10/46
+interface fc10/47
+interface fc10/48
+interface fc10/1
+  switchport mode E
+interface fc10/2
+  switchport mode E
+interface fc10/5
+  switchport mode E
+interface fc10/6
+  switchport mode E
+interface fc10/9
+  switchport mode E
+interface fc10/10
+  switchport mode E
+interface fc10/13
+  switchport mode E
+interface fc10/14
+  switchport mode E
+logging server 11.155.55.174
+logging server 11.159.187.32
+logging server 11.155.55.116
+system default zone distribute full
+system default zone mode enhanced
+zone mode enhanced vsan 1
+zone mode enhanced vsan 11
+zone mode enhanced vsan 12
+
+
+interface fc1/1
+
+interface fc1/2
+
+interface fc1/3
+
+interface fc1/4
+
+interface fc1/5
+
+interface fc1/6
+
+interface fc1/7
+
+interface fc1/8
+
+interface fc1/9
+
+interface fc1/10
+
+interface fc1/11
+
+interface fc1/12
+
+interface fc1/13
+
+interface fc1/14
+
+interface fc1/15
+
+interface fc1/16
+
+interface fc1/17
+
+interface fc1/18
+
+interface fc1/19
+
+interface fc1/20
+
+interface fc1/21
+
+interface fc1/22
+
+interface fc1/23
+
+interface fc1/24
+
+interface fc1/25
+
+interface fc1/26
+
+interface fc1/27
+
+interface fc1/28
+
+interface fc1/29
+
+interface fc1/30
+
+interface fc1/31
+
+interface fc1/32
+
+interface fc1/33
+
+interface fc1/34
+
+interface fc1/35
+
+interface fc1/36
+
+interface fc1/37
+
+interface fc1/38
+
+interface fc1/39
+
+interface fc1/40
+
+interface fc1/41
+
+interface fc1/42
+
+interface fc1/43
+
+interface fc1/44
+
+interface fc1/45
+
+interface fc1/46
+
+interface fc1/47
+
+interface fc1/48
+
+interface fc2/1
+
+interface fc2/2
+
+interface fc2/3
+
+interface fc2/4
+
+interface fc2/5
+
+interface fc2/6
+
+interface fc2/7
+
+interface fc2/8
+
+interface fc2/9
+
+interface fc2/10
+
+interface fc2/11
+
+interface fc2/12
+
+interface fc2/13
+
+interface fc2/14
+
+interface fc2/15
+
+interface fc2/16
+
+interface fc2/17
+
+interface fc2/18
+
+interface fc2/19
+
+interface fc2/20
+
+interface fc2/21
+
+interface fc2/22
+
+interface fc2/23
+
+interface fc2/24
+
+interface fc2/25
+
+interface fc2/26
+
+interface fc2/27
+
+interface fc2/28
+
+interface fc2/29
+
+interface fc2/30
+
+interface fc2/31
+
+interface fc2/32
+
+interface fc2/33
+
+interface fc2/34
+
+interface fc2/35
+
+interface fc2/36
+
+interface fc2/37
+
+interface fc2/38
+
+interface fc2/39
+
+interface fc2/40
+
+interface fc2/41
+
+interface fc2/42
+
+interface fc2/43
+
+interface fc2/44
+
+interface fc2/45
+
+interface fc2/46
+
+interface fc2/47
+
+interface fc2/48
+
+interface fc3/1
+
+interface fc3/2
+
+interface fc3/3
+
+interface fc3/4
+
+interface fc3/5
+
+interface fc3/6
+
+interface fc3/7
+
+interface fc3/8
+
+interface fc3/9
+
+interface fc3/10
+
+interface fc3/11
+
+interface fc3/12
+
+interface fc3/13
+
+interface fc3/14
+
+interface fc3/15
+
+interface fc3/16
+
+interface fc3/17
+
+interface fc3/18
+
+interface fc3/19
+
+interface fc3/20
+
+interface fc3/21
+
+interface fc3/22
+
+interface fc3/23
+
+interface fc3/24
+
+interface fc3/25
+
+interface fc3/26
+
+interface fc3/27
+
+interface fc3/28
+
+interface fc3/29
+
+interface fc3/30
+
+interface fc3/31
+
+interface fc3/32
+
+interface fc3/33
+
+interface fc3/34
+
+interface fc3/35
+
+interface fc3/36
+
+interface fc3/37
+
+interface fc3/38
+
+interface fc3/39
+
+interface fc3/40
+
+interface fc3/41
+
+interface fc3/42
+
+interface fc3/43
+
+interface fc3/44
+
+interface fc3/45
+
+interface fc3/46
+
+interface fc3/47
+
+interface fc3/48
+
+interface fc4/1
+
+interface fc4/2
+
+interface fc4/3
+
+interface fc4/4
+
+interface fc4/5
+
+interface fc4/6
+
+interface fc4/7
+
+interface fc4/8
+
+interface fc4/9
+
+interface fc4/10
+
+interface fc4/11
+
+interface fc4/12
+
+interface fc4/13
+
+interface fc4/14
+
+interface fc4/15
+
+interface fc4/16
+
+interface fc4/17
+
+interface fc4/18
+
+interface fc4/19
+
+interface fc4/20
+
+interface fc4/21
+
+interface fc4/22
+
+interface fc4/23
+
+interface fc4/24
+
+interface fc4/25
+
+interface fc4/26
+
+interface fc4/27
+
+interface fc4/28
+
+interface fc4/29
+
+interface fc4/30
+
+interface fc4/31
+
+interface fc4/32
+
+interface fc4/33
+
+interface fc4/34
+
+interface fc4/35
+
+interface fc4/36
+
+interface fc4/37
+
+interface fc4/38
+
+interface fc4/39
+
+interface fc4/40
+
+interface fc4/41
+
+interface fc4/42
+
+interface fc4/43
+
+interface fc4/44
+
+interface fc4/45
+
+interface fc4/46
+
+interface fc4/47
+
+interface fc4/48
+
+interface fc7/1
+  channel-group 107 force
+
+interface fc7/2
+  channel-group 107 force
+
+interface fc7/3
+
+interface fc7/4
+
+interface fc7/5
+  channel-group 107 force
+
+interface fc7/6
+  channel-group 107 force
+
+interface fc7/7
+
+interface fc7/8
+
+interface fc7/9
+  channel-group 7 force
+
+interface fc7/10
+  channel-group 7 force
+
+interface fc7/11
+
+interface fc7/12
+
+interface fc7/13
+  channel-group 7 force
+
+interface fc7/14
+  channel-group 7 force
+
+interface fc7/15
+
+interface fc7/16
+
+interface fc7/17
+
+interface fc7/18
+
+interface fc7/19
+
+interface fc7/20
+
+interface fc7/21
+
+interface fc7/22
+
+interface fc7/23
+
+interface fc7/24
+
+interface fc7/25
+
+interface fc7/26
+
+interface fc7/27
+
+interface fc7/28
+
+interface fc7/29
+
+interface fc7/30
+
+interface fc7/31
+
+interface fc7/32
+
+interface fc7/33
+
+interface fc7/34
+
+interface fc7/35
+
+interface fc7/36
+
+interface fc7/37
+
+interface fc7/38
+
+interface fc7/39
+
+interface fc7/40
+
+interface fc7/41
+
+interface fc7/42
+
+interface fc7/43
+
+interface fc7/44
+
+interface fc7/45
+
+interface fc7/46
+
+interface fc7/47
+
+interface fc7/48
+
+interface fc8/1
+  channel-group 107 force
+
+interface fc8/2
+  channel-group 107 force
+
+interface fc8/3
+
+interface fc8/4
+
+interface fc8/5
+  channel-group 107 force
+
+interface fc8/6
+  channel-group 107 force
+
+interface fc8/7
+
+interface fc8/8
+
+interface fc8/9
+  channel-group 7 force
+
+interface fc8/10
+  channel-group 7 force
+
+interface fc8/11
+
+interface fc8/12
+
+interface fc8/13
+  channel-group 7 force
+
+interface fc8/14
+  channel-group 7 force
+
+interface fc8/15
+
+interface fc8/16
+
+interface fc8/17
+
+interface fc8/18
+
+interface fc8/19
+
+interface fc8/20
+
+interface fc8/21
+
+interface fc8/22
+
+interface fc8/23
+
+interface fc8/24
+
+interface fc8/25
+
+interface fc8/26
+
+interface fc8/27
+
+interface fc8/28
+
+interface fc8/29
+
+interface fc8/30
+
+interface fc8/31
+
+interface fc8/32
+
+interface fc8/33
+
+interface fc8/34
+
+interface fc8/35
+
+interface fc8/36
+
+interface fc8/37
+
+interface fc8/38
+
+interface fc8/39
+
+interface fc8/40
+
+interface fc8/41
+
+interface fc8/42
+
+interface fc8/43
+
+interface fc8/44
+
+interface fc8/45
+
+interface fc8/46
+
+interface fc8/47
+
+interface fc8/48
+
+interface fc9/1
+  channel-group 107 force
+
+interface fc9/2
+  channel-group 107 force
+
+interface fc9/3
+
+interface fc9/4
+
+interface fc9/5
+  channel-group 107 force
+
+interface fc9/6
+  channel-group 107 force
+
+interface fc9/7
+
+interface fc9/8
+
+interface fc9/9
+  channel-group 7 force
+
+interface fc9/10
+  channel-group 7 force
+
+interface fc9/11
+
+interface fc9/12
+
+interface fc9/13
+  channel-group 7 force
+
+interface fc9/14
+  channel-group 7 force
+
+interface fc9/15
+
+interface fc9/16
+
+interface fc9/17
+
+interface fc9/18
+
+interface fc9/19
+
+interface fc9/20
+
+interface fc9/21
+
+interface fc9/22
+
+interface fc9/23
+
+interface fc9/24
+
+interface fc9/25
+
+interface fc9/26
+
+interface fc9/27
+
+interface fc9/28
+
+interface fc9/29
+
+interface fc9/30
+
+interface fc9/31
+
+interface fc9/32
+
+interface fc9/33
+
+interface fc9/34
+
+interface fc9/35
+
+interface fc9/36
+
+interface fc9/37
+
+interface fc9/38
+
+interface fc9/39
+
+interface fc9/40
+
+interface fc9/41
+
+interface fc9/42
+
+interface fc9/43
+
+interface fc9/44
+
+interface fc9/45
+
+interface fc9/46
+
+interface fc9/47
+
+interface fc9/48
+
+interface fc10/1
+  channel-group 107 force
+
+interface fc10/2
+  channel-group 107 force
+
+interface fc10/3
+
+interface fc10/4
+
+interface fc10/5
+  channel-group 107 force
+
+interface fc10/6
+  channel-group 107 force
+
+interface fc10/7
+
+interface fc10/8
+
+interface fc10/9
+  channel-group 7 force
+
+interface fc10/10
+  channel-group 7 force
+
+interface fc10/11
+
+interface fc10/12
+
+interface fc10/13
+  channel-group 7 force
+
+interface fc10/14
+  channel-group 7 force
+
+interface fc10/15
+
+interface fc10/16
+
+interface fc10/17
+
+interface fc10/18
+
+interface fc10/19
+
+interface fc10/20
+
+interface fc10/21
+
+interface fc10/22
+
+interface fc10/23
+
+interface fc10/24
+
+interface fc10/25
+
+interface fc10/26
+
+interface fc10/27
+
+interface fc10/28
+
+interface fc10/29
+
+interface fc10/30
+
+interface fc10/31
+
+interface fc10/32
+
+interface fc10/33
+
+interface fc10/34
+
+interface fc10/35
+
+interface fc10/36
+
+interface fc10/37
+
+interface fc10/38
+
+interface fc10/39
+
+interface fc10/40
+
+interface fc10/41
+
+interface fc10/42
+
+interface fc10/43
+
+interface fc10/44
+
+interface fc10/45
+
+interface fc10/46
+
+interface fc10/47
+
+interface fc10/48
+ip default-gateway 11.155.62.254
+
