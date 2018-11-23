@@ -44,8 +44,8 @@ so when parse fcdomain fcid database , all alias will be ignored
         fcdomain_count_01=len(fcdomain_list_01[1:]) 
         fcdomain_count_02=len(fcdomain_list_02[1:])
         
-        #print "MDS 01 fcdomain list count is :" + str(fcdomain_count_01)
-        #print "MDS 02 fcdomain list count is :" + str(fcdomain_count_02)
+        print "MDS 01 fcdomain list count is :" + str(fcdomain_count_01)
+        print "MDS 02 fcdomain list count is :" + str(fcdomain_count_02)
         
         missed_fcid_list=[]
         
