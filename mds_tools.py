@@ -223,8 +223,8 @@ so when parse fcdomain fcid database , all alias will be ignored
     
 start_time=time.time()    
 
-#tool=MDS_Tools()
-#result=tool.compare_zone_active_01(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
+tool=MDS_Tools()
+result=tool.compare_zone_active_01(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
 
 # try new git branch
 

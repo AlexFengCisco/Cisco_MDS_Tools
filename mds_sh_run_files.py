@@ -5,5 +5,5 @@ Created on Nov 20, 2018
 '''
 DIRECTORY = '`/'
 
-MDS_SH_RUN_01 = "mds01_sh_run.cfg"
-MDS_SH_RUN_02 = "mds02_sh_run.cfg"
+MDS_SH_RUN_01 = "F7HE1_9513.txt"
+MDS_SH_RUN_02 = "F7HE1_9710_INIT_FINAL.txt"
