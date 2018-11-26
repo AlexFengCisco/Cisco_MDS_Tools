@@ -12,14 +12,21 @@ start_time=time.time()
 tool=MT.MDS_Tools()
 result= tool.compare_fcid_database(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
 
-error_mds=result[0]
-missed_list=result[1]
 
-end_time=time.time()-start_time
-print "missed switch is "+error_mds
+
+
+print "Switch MDS_01 fcid count is " +str(result[0])
 print "missed fcid list below "
-for item in missed_list:
+for item in result[3]:
     print item
+
+print "Switch MDS_02 fcid count is " + str(result[2])
+print "missed fcid list below "
+for item in result[1]:
+    print item
+
+
+end_time = time.time()-start_time
 print "process during "+str(end_time)+"seconds"
 
 

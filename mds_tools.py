@@ -225,7 +225,7 @@ so when parse fcdomain fcid database , all alias will be ignored
     
 start_time=time.time()    
 
-tool=MDS_Tools()
+#tool=MDS_Tools()
 #result=tool.compare_zone_active_01(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
 
 ##### test comapre zone active 
@@ -239,6 +239,7 @@ for item in result:
 '''
 ##### test compare fcid database
 
+'''
 result= tool.compare_fcid_database(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
 
 print result
@@ -253,7 +254,7 @@ print "Switch MDS_02 fcid count is " + str(result[2])
 print "missed fcid list below "
 for item in result[1]:
     print item
-
+'''
 
 ##### end test compare fcid database
     
