@@ -6,11 +6,7 @@
      
      compare mds active zone database with compare_compare_zone_active(sh_run_01,sh_run_02
      
-     slow performance , 5K zone with members will take more than 300 seconds
+     * So far low performance , 5K zone with members will take more than 300 seconds, improving...
 
      
-     Branch Master 
      
-     merged with fcid new branch
-     
-     deleted fcid compare branch
