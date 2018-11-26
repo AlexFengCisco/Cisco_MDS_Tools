@@ -28,7 +28,8 @@ so when parse fcdomain fcid database , all alias will be ignored
         pass
     
     def compare_fcid_database(self,cfg_file_01,cfg_file_02):
-        
+
+        #comparte fcid dataase from show run files 
         
         cfg_parse_01 = self.parse_cfg_file(cfg_file_01)
         cfg_parse_02 = self.parse_cfg_file(cfg_file_02)
@@ -128,7 +129,7 @@ so when parse fcdomain fcid database , all alias will be ignored
         return error_zones
 
     def compare_flogi_db(self,cfg_file_01,cfg_file02):
-        
+
         pass
 
         return
