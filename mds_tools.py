@@ -44,30 +44,32 @@ so when parse fcdomain fcid database , all alias will be ignored
         fcdomain_count_01=len(fcdomain_list_01[1:]) 
         fcdomain_count_02=len(fcdomain_list_02[1:])
         
-        print "MDS 01 fcdomain list count is :" + str(fcdomain_count_01)
-        print "MDS 02 fcdomain list count is :" + str(fcdomain_count_02)
+        #print "MDS 01 fcdomain list count is :" + str(fcdomain_count_01)
+        #print "MDS 02 fcdomain list count is :" + str(fcdomain_count_02)
         
-        missed_fcid_list=[]
-        
-        if fcdomain_count_01>fcdomain_count_02:
-            missed_mds="MDS 02"
-            #print "for 1 in 2 check "
-            for fcdomain_item_01 in fcdomain_list_01[1:]:
-                if fcdomain_item_01 in fcdomain_list_02[1:]:
-                    pass
-                else:
-                    #print "Missed fcid in MDS 01 "+fcdomain_item_01
-                    missed_fcid_list.append(fcdomain_item_01)
-        else:
-            missed_mds="MDS 01"
-            #print "for 2 in 1 check"
-            for fcdomain_item_02 in fcdomain_list_02[1:]:
-                if fcdomain_item_02 in fcdomain_list_01[1:]:
-                    pass
-                else:
-                    #print "Missed fcid in MDS 02 "+fcdomain_item_02
-                    missed_fcid_list.append(fcdomain_item_02)
-        return (missed_mds,missed_fcid_list)
+        missed_fcid_list_01=[]
+        missed_fcid_list_02=[]
+
+        missed_mds_01 = "MDS 02"
+        # print "for 1 in 2 check "
+        for fcdomain_item_01 in fcdomain_list_01[1:]:
+            if fcdomain_item_01 in fcdomain_list_02[1:]:
+                pass
+            else:
+                # print "Missed fcid in MDS 01 "+fcdomain_item_01
+                missed_fcid_list_01.append(fcdomain_item_01)
+
+        missed_mds_02 = "MDS 01"
+        # print "for 2 in 1 check"
+        for fcdomain_item_02 in fcdomain_list_02[1:]:
+            if fcdomain_item_02 in fcdomain_list_01[1:]:
+                pass
+            else:
+                # print "Missed fcid in MDS 02 "+fcdomain_item_02
+                missed_fcid_list_02.append(fcdomain_item_02)
+
+        return (fcdomain_count_01,missed_fcid_list_01,fcdomain_count_02,missed_fcid_list_02)
+                
     
     
     def compare_zone_active(self,cfg_file_01,cfg_file_02):
@@ -224,7 +226,7 @@ so when parse fcdomain fcid database , all alias will be ignored
 start_time=time.time()    
 
 tool=MDS_Tools()
-result=tool.compare_zone_active_01(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
+#result=tool.compare_zone_active_01(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
 
 ##### test comapre zone active 
 '''
@@ -236,19 +238,24 @@ for item in result:
     print ('='*200)
 '''
 ##### test compare fcid database
-'''
+
 result= tool.compare_fcid_database(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
 
-error_mds=result[0]
-missed_list=result[1]
+print result
 
 
-print "error switch is "+error_mds
+print "Switch MDS_01 fcid count is " +str(result[0])
 print "missed fcid list below "
-for item in missed_list:
+for item in result[3]:
     print item
-'''
-##### end test compare fcid database    
+
+print "Switch MDS_02 fcid count is " + str(result[2])
+print "missed fcid list below "
+for item in result[1]:
+    print item
+
+
+##### end test compare fcid database
     
 end_time=time.time()-start_time
 print "Process took "+str(end_time)+" seconds"
