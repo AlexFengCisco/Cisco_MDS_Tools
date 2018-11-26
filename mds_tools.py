@@ -126,8 +126,14 @@ so when parse fcdomain fcid database , all alias will be ignored
             
             
         return error_zones
+
+    def compare_flogi_db(self,cfg_file_01,cfg_file02):
+        
+        pass
+
+        return
     
-    
+
     
     def parse_cfg_file(self,cfg_file):
         
