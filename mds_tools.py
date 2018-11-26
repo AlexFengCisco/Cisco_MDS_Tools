@@ -76,6 +76,8 @@ so when parse fcdomain fcid database , all alias will be ignored
     def compare_zone_active(self,cfg_file_01,cfg_file_02):
         
         '''
+
+        comapre zone active from sh run files 
         Assume all MDS switches has same active zone ,just compare miss * part , or miss zone member part
         
         in case of low performance , strongly recommend use show zone active file to reduce the compute time , usually , 5000 zones compare time is 10 minutes
