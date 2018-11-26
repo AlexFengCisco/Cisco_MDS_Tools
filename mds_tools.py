@@ -165,7 +165,7 @@ so when parse fcdomain fcid database , all alias will be ignored
         
         return zone_active_DBs
     
-start_time=time.time()    
+#start_time=time.time()
 
 #tool=MDS_Tools()
 #result=tool.compare_zone_active_01(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
@@ -206,5 +206,5 @@ for item in result[1]:
 
 ##### end test compare fcid database
     
-end_time=time.time()-start_time
-print "Process took "+str(end_time)+" seconds"
+#end_time=time.time()-start_time
+#print "Process took "+str(end_time)+" seconds"
