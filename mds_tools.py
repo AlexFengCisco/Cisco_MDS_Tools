@@ -127,68 +127,7 @@ so when parse fcdomain fcid database , all alias will be ignored
             
         return error_zones
     
-    def compare_zone_active_01(self,cfg_file_01,cfg_file_02):
-        
-        '''
-        Assume all MDS switches has same active zone ,just compare miss * part , or miss zone member part
-        
-        in case of low performance , strongly recommend use show zone active file to reduce the compute time , usually , 5000 zones compare time is 10 minutes
-        '''
-        zone_active_dbs_01=self.parse_zone_active_dbs(cfg_file_01)
-        zone_active_dbs_02=self.parse_zone_active_dbs(cfg_file_02)
-        
-        zone_active_dbs_01_lines=zone_active_dbs_01.splitlines()
-        zone_active_dbs_02_lines=zone_active_dbs_02.splitlines()
-        
-        print type(zone_active_dbs_01_lines)
-        #for i in zone_active_dbs_01_lines:
-            #print i
-        '''
-        cfg_parse_01 = CiscoConfParse(zone_active_dbs_01.splitlines())
-        cfg_parse_02 = CiscoConfParse(zone_active_dbs_02.splitlines())
-        
-        #cfg_parse_01 = self.parse_cfg_file(cfg_file_01)
-        #cfg_parse_02 = self.parse_cfg_file(cfg_file_02)
-        
-        
-        
-        zone_list=[]
-        for obj_zone_list in cfg_parse_01.find_objects("zone name"):
-            zone_list.append(obj_zone_list.text)
-        
-        total=len(zone_list)
-        progressing = 0
-        init_percent = 0
-            
-        print "Zone Database Count : "+ str(len(zone_list))
-        
-        error_zones=[]
-        
-        for zone in zone_list:
-            zone01_members = cfg_parse_01.find_all_children(zone)
-            zone02_members = cfg_parse_02.find_all_children(zone)
-            #print zone
-            #print zone01_members
-            #print zone02_members
-           
     
-            if zone01_members  == zone02_members :
-                pass
-                #print "SAME  zone name = "+zone
-            else:
-                error_zonename= "DIFF zone name = "+zone
-                error_sw1_member = "MDS sw01 "+str(zone01_members)
-                error_sw2_member =  "MDS sw02 "+str(zone02_members)
-                error_zones.append([error_zonename,error_sw1_member,error_sw2_member])
-                #print error_zones
-               
-            progressing+=1
-            if str(float(progressing)/total)[2] == str(init_percent) :
-                print "Analyzing  Percent "+str(float(progressing)/total)[2]+'0%'
-                init_percent+=1
-            
-         '''   
-        return #error_zones
     
     def parse_cfg_file(self,cfg_file):
         
