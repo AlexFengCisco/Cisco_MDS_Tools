@@ -165,6 +165,10 @@ so when parse fcdomain fcid database , all alias will be ignored
         
         return zone_active_DBs
     
+
+##################################################  TESTING PART ##################################################
+
+
 #start_time=time.time()
 
 #tool=MDS_Tools()
