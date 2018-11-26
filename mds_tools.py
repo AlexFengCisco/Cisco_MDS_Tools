@@ -77,7 +77,7 @@ so when parse fcdomain fcid database , all alias will be ignored
         
         '''
 
-        comapre zone active from sh run files 
+        comapre zone active from sh run files
         Assume all MDS switches has same active zone ,just compare miss * part , or miss zone member part
         
         in case of low performance , strongly recommend use show zone active file to reduce the compute time , usually , 5000 zones compare time is 10 minutes
@@ -179,6 +179,12 @@ for item in result:
     print "sw01 error zone member" + item[2]
     print ('='*200)
 '''
+
+#### end of test compare zone active
+
+
+
+
 ##### test compare fcid database
 
 '''
