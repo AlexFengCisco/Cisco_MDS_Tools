@@ -1,6 +1,7 @@
 '''
 get fabric inventory switches result format
 
+DCNM Version 10.3(1)
 
 [{u'connUnitStatus': 4,
   u'displayValues': [u'dcn-mds9148s',

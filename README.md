@@ -13,3 +13,4 @@
     
     logon with credential to get Token 
     REST API operations with Token
+    Example code to get inventory switches 
