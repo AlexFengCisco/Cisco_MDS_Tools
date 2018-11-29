@@ -49,7 +49,7 @@ def generate_dcnmtoken(headers,js_token=None):
         return None
     return dcnm_token
 
-
+'''
 def create_zone(queryKey, zoneName, fabricDBID):
 print("creating zone")
 zone_url = self._dcnm_url + self.CREATE_ZONE
@@ -63,7 +63,7 @@ response = requests.post(zone_url, data=payload, headers=self._rest_api.headers,
 print("printing response")
 print(response.text)
 
-
+'''
 
 credentials = generate_encoded_credentials(username,password)
 
@@ -79,6 +79,19 @@ headers['Dcnm-Token'] = dcnm_token['Dcnm-Token']
 
 print headers
 
-event_url='pmn/events'
+event_url=dcnm_url+'rest/top-down/fabrics/*/networks'
 
-response = requests.
+response = requests.get(event_url,headers=headers,verify=verify)
+
+
+
+response_content=json.loads(response.text)
+
+
+print response_content
+for i in response_content['stackTrace']:
+    print i['methodName']
+    print i['fileName']
+    print i['lineNumber']
+    print i['className']
+    print i['nativeMethod']
