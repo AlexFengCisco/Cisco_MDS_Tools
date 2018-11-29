@@ -87,7 +87,7 @@ import base64
 import ast
 
 LOGON_URL = 'rest/logon'
-dcnm_url='https://x.x.x.x/'
+dcnm_url='https://dcnm-ip/'
 
 username='sample'
 password='sample'
@@ -162,6 +162,7 @@ print response_content
 
 for i in response_content:
     print "switch Name =" +i['logicalName']
+    print "Switch modsel ="+ i['model']
     print "Fabric = " +i['fabricName']
     print "Ip Address ="+i['ipAddress']
     print "OS version ="+i['release']
@@ -172,30 +173,34 @@ for i in response_content:
 result as 
 
 switch Name =dcn-mds9148s
+Switch modsel =DS-C9148S
 Fabric = Fabric_mds9513
 Ip Address =x.x.x.x
 OS version =6.2(11c)
 ----------------------------------------------------------------------------------------------------
 switch Name =MDS-1
+Switch modsel =DS-C9250i
 Fabric = Fabric_MDS-1
 Ip Address =x.x.x.x
 OS version =6.2(19)
 ----------------------------------------------------------------------------------------------------
 switch Name =MDS-2
+Switch modsel =DS-C9250i
 Fabric = Fabric_MDS-1
 Ip Address =x.x.x.x
 OS version =6.2(19)
 ----------------------------------------------------------------------------------------------------
 switch Name =mds9513
+Switch modsel =DS-C9513
 Fabric = Fabric_mds9513
 Ip Address =x.x.x.x
 OS version =6.2(19)
 ----------------------------------------------------------------------------------------------------
 switch Name =sw-core1-9710
+Switch modsel =DS-C9710
 Fabric = Fabric_mds9513
 Ip Address =x.x.x.x
 OS version =8.1(1a)
 ----------------------------------------------------------------------------------------------------
-
 
 '''
