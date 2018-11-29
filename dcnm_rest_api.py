@@ -4,10 +4,10 @@ import base64
 import ast
 
 LOGON_URL = 'rest/logon'
-dcnm_url='https://dcnm-ipadd/'
+dcnm_url='https://x.x.x.x/'
 
-username='sample_user'
-password='sample_password'
+username='root'
+password='sample'
 
 headers = {'Content-Type': 'application/json; charset=utf8'}
 verify = False
@@ -49,21 +49,6 @@ def generate_dcnmtoken(headers,js_token=None):
         return None
     return dcnm_token
 
-'''
-def create_zone(queryKey, zoneName, fabricDBID):
-print("creating zone")
-zone_url = self._dcnm_url + self.CREATE_ZONE
-print(zone_url)
-self._rest_api.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-payload = {}
-payload['queryKey'] = queryKey
-payload['zoneName'] = zoneName
-payload['fabricDBID'] = fabricDBID
-response = requests.post(zone_url, data=payload, headers=self._rest_api.headers, verify=self.verify)
-print("printing response")
-print(response.text)
-
-'''
 
 credentials = generate_encoded_credentials(username,password)
 
@@ -78,7 +63,7 @@ print dcnm_token['Dcnm-Token']
 headers['Dcnm-Token'] = dcnm_token['Dcnm-Token']
 
 print headers
-
+'''
 event_url=dcnm_url+'rest/top-down/fabrics/*/networks'
 
 response = requests.get(event_url,headers=headers,verify=verify)
@@ -95,3 +80,5 @@ for i in response_content['stackTrace']:
     print i['lineNumber']
     print i['className']
     print i['nativeMethod']
+'''
+
