@@ -1,3 +1,86 @@
+'''
+get fabric inventory switches result format
+
+
+[{u'connUnitStatus': 4,
+  u'displayValues': [u'dcn-mds9148s',
+                     u'10.75.60.5',
+                     u'Fabric_mds9513',
+                     u'20:00:00:de:fb:2c:51:c0',
+                     u'48', u'Cisco',
+                     u'DS-C9148S',
+                     u'6.2(11c)',
+                     u'3 days,03:59:49'],
+  u'upTime': 0,
+  u'licenseDetail': u'Permanent',
+  u'switchRole': u'',
+  u'standbySupState': 1,
+  u'logicalName': u'dcn-mds9148s',
+  u'domain': None,
+  u'modelType': 1491,
+  u'numberOfPortsStr': u'48',
+  u'activeSupSlot': 1,
+  u'vsanWwn': None,
+  u'mds': True,
+  u'vsanWwnName': None,
+  u'wwn': None,
+  u'primaryIP': None,
+  u'principal': None,
+  u'index': 1,
+  u'availPortsStr': u'0',
+  u'fcoeEnabled': False,
+  u'unmanagableCause': None,
+  u'network': u'SAN',
+  u'switchDbID': 1651640,
+  u'licenseViolation': False,
+  u'availPorts': 0,
+  u'version': None,
+  u'health': 65,
+  u'location': u'',
+  u'fid': 50,
+  u'upTimeStr': u'3 days, 03:59:49',
+  u'managable': True,
+  u'nonMdsModel': u'DS-C9148S',
+  u'npvEnabled': False,
+  u'fex': False,
+  u'colDBId': 0,
+  u'numberOfPorts': 48,
+  u'lan': False,
+  u'domainID': 0,
+  u'vendor': u'Cisco',
+  u'mgmtAddress': None,
+  u'healthStr': u'65%',
+  u'swWwn': {u'value': u'20:00:00:de:fb:2c:51:c0'},
+  u'usedPortsStr': u'0',
+  u'vdcName': u'',
+  u'pmCollect': False,
+  u'membership': None,
+  u'vdcMac': None,
+  u'scope': u'Fabric_mds9513',
+  u'memoryUsage': 18,
+  u'linkName': None,
+  u'cpuUsage': 0,
+  u'fabricName': u'Fabric_mds9513',
+  u'present': True,
+  u'upTimeNumber': 3,
+  u'name': None,
+  u'displayHdrs': [u'Name', u'IP Address', u'Fabric', u'WWN', u'FC Ports', u'Vendor', u'Model', u'Release', u'UpTime'],
+  u'usedPorts': 0,
+  u'serialNumber': u'JPG20320059',
+  u'lastScanTime': 1543469845465,
+  u'vdcId': -1,
+  u'username': u'admin',
+  u'swWwnName': u'20:00:00:de:fb:2c:51:c0', u'contact': u'qifawu', u'status': u'Module Warning',
+  u'beaconable': False,
+  u'release': u'6.2(11c)',
+  u'model': u'DS-C9148S',
+  u'ipAddress': u'10.75.60.5',
+  u'ports': 0}
+  ]
+
+'''
+
+
 import json
 import requests
 import base64
@@ -6,7 +89,7 @@ import ast
 LOGON_URL = 'rest/logon'
 dcnm_url='https://x.x.x.x/'
 
-username='root'
+username='sample'
 password='sample'
 
 headers = {'Content-Type': 'application/json; charset=utf8'}
@@ -63,8 +146,10 @@ print dcnm_token['Dcnm-Token']
 headers['Dcnm-Token'] = dcnm_token['Dcnm-Token']
 
 print headers
-'''
-event_url=dcnm_url+'rest/top-down/fabrics/*/networks'
+
+
+
+event_url=dcnm_url+'fm/fmrest/inventory/switches'
 
 response = requests.get(event_url,headers=headers,verify=verify)
 
@@ -74,11 +159,43 @@ response_content=json.loads(response.text)
 
 
 print response_content
-for i in response_content['stackTrace']:
-    print i['methodName']
-    print i['fileName']
-    print i['lineNumber']
-    print i['className']
-    print i['nativeMethod']
-'''
 
+for i in response_content:
+    print "switch Name =" +i['logicalName']
+    print "Fabric = " +i['fabricName']
+    print "Ip Address ="+i['ipAddress']
+    print "OS version ="+i['release']
+    print ("-"*100)
+
+
+'''
+result as 
+
+switch Name =dcn-mds9148s
+Fabric = Fabric_mds9513
+Ip Address =x.x.x.x
+OS version =6.2(11c)
+----------------------------------------------------------------------------------------------------
+switch Name =MDS-1
+Fabric = Fabric_MDS-1
+Ip Address =x.x.x.x
+OS version =6.2(19)
+----------------------------------------------------------------------------------------------------
+switch Name =MDS-2
+Fabric = Fabric_MDS-1
+Ip Address =x.x.x.x
+OS version =6.2(19)
+----------------------------------------------------------------------------------------------------
+switch Name =mds9513
+Fabric = Fabric_mds9513
+Ip Address =x.x.x.x
+OS version =6.2(19)
+----------------------------------------------------------------------------------------------------
+switch Name =sw-core1-9710
+Fabric = Fabric_mds9513
+Ip Address =x.x.x.x
+OS version =8.1(1a)
+----------------------------------------------------------------------------------------------------
+
+
+'''
