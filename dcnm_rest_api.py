@@ -4,10 +4,10 @@ import base64
 import ast
 
 LOGON_URL = 'rest/logon'
-dcnm_url='https://10.124.34.233/'
+dcnm_url='https://dcnm-ipadd/'
 
-username='root'
-password='1qaz@WSX'
+username='sample_user'
+password='sample_password'
 
 headers = {'Content-Type': 'application/json; charset=utf8'}
 verify = False
