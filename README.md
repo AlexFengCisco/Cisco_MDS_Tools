@@ -9,4 +9,7 @@
      * So far low performance , 5K zone with members will take more than 300 seconds, improving...
 
      
-     
+#### DCNM REST API sample for refrence
+    
+    logon with credential to get Token 
+    REST API operations with Token
