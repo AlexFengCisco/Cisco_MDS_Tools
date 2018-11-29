@@ -4,7 +4,7 @@ get fabric inventory switches result format
 
 [{u'connUnitStatus': 4,
   u'displayValues': [u'dcn-mds9148s',
-                     u'10.75.60.5',
+                     u'x.x.x.x',
                      u'Fabric_mds9513',
                      u'20:00:00:de:fb:2c:51:c0',
                      u'48', u'Cisco',
@@ -74,7 +74,7 @@ get fabric inventory switches result format
   u'beaconable': False,
   u'release': u'6.2(11c)',
   u'model': u'DS-C9148S',
-  u'ipAddress': u'10.75.60.5',
+  u'ipAddress': u'x.x.x.x',
   u'ports': 0}
   ]
 
