@@ -9,7 +9,7 @@ import time
 
 start_time=time.time()    
 
-tool=MT.MDS_Tools()
+tool=MT.MdsTools()
 result= tool.compare_fcid_database(SF.MDS_SH_RUN_01,SF.MDS_SH_RUN_02)
 
 
