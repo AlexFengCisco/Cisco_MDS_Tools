@@ -8,14 +8,15 @@ import mds_tools as MT
 import mds_sh_run_files as SF
 
 
-start_time = time.time()
 
-tool = MT.MdsTools()
-result = tool.compare_fcid_database(SF.MDS_SH_RUN_01, SF.MDS_SH_RUN_02)
 
 
 if __name__ == '__main__':
 
+    start_time = time.time()
+
+    tool = MT.MdsTools()
+    result = tool.compare_fcid_database(SF.MDS_SH_RUN_01, SF.MDS_SH_RUN_02)
     print "Switch MDS_01 fcid count is " + str(result[0])
     print "missed fcid list below "
     for item in result[3]:
